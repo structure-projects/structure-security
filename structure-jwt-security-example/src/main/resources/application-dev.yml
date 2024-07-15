@@ -1,0 +1,13 @@
+server:
+  port: 8801
+structure:
+  jwt:
+    secret: 12345646
+    antMatchers:
+      unAuthenticated:
+        # 不经过身份验证的接口
+        - /api/user/login
+        - /doc.html
+        - /webjars/**
+        - /swagger-resources/**
+        - /v2/api-docs/**
