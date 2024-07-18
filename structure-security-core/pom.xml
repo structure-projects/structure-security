@@ -5,11 +5,12 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>cn.structured</groupId>
-        <artifactId>structure-dependencies</artifactId>
-        <version>1.2.1.RELEASE</version>
+        <artifactId>structure-security-dependencies</artifactId>
+        <version>${revision}</version>
+        <relativePath>../structure-security-dependencies/pom.xml</relativePath>
     </parent>
 
-    <version>1.2.1.RELEASE</version>
+    <version>${revision}</version>
 
     <packaging>jar</packaging>
     <artifactId>structure-security-core</artifactId>
@@ -62,6 +63,10 @@
         <dependency>
             <groupId>cn.structured</groupId>
             <artifactId>structure-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>

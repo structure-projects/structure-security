@@ -4,12 +4,14 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <groupId>cn.structured</groupId>
-        <artifactId>structure-dependencies</artifactId>
-        <version>1.2.1.RELEASE</version>
+        <artifactId>structure-security-dependencies</artifactId>
+        <version>${revision}</version>
+        <relativePath>../structure-security-dependencies/pom.xml</relativePath>
     </parent>
-    <modelVersion>4.0.0</modelVersion>
 
-    <version>1.2.1.RELEASE</version>
+    <version>${revision}</version>
+
+    <modelVersion>4.0.0</modelVersion>
 
     <packaging>jar</packaging>
     <artifactId>structure-jwt-security-starter</artifactId>
@@ -64,11 +66,6 @@
         </dependency>
 
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
         </dependency>
@@ -81,13 +78,11 @@
         <dependency>
             <groupId>cn.structured</groupId>
             <artifactId>structure-security-core</artifactId>
-            <version>1.2.1.RELEASE</version>
         </dependency>
 
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt</artifactId>
-            <version>0.9.1</version>
         </dependency>
 
     </dependencies>

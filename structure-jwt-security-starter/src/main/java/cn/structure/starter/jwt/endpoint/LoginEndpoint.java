@@ -10,7 +10,6 @@ import cn.structure.starter.jwt.interfaces.ITokenStore;
 import cn.structured.security.entity.StructureAuthUser;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
