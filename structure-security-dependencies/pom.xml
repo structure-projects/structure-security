@@ -7,7 +7,7 @@
     <parent>
         <groupId>cn.structured</groupId>
         <artifactId>structure-boot-parent</artifactId>
-        <version>1.2.1.RELEASE</version>
+        <version>1.2.2</version>
     </parent>
 
     <artifactId>structure-security-dependencies</artifactId>

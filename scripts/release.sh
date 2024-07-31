@@ -8,4 +8,3 @@ fi
 cd ../
 cd structure-security-dependencies
 mvn clean deploy -P release,oss -Dmaven.test.skip=true -Drevision=$version
-sh dockerbuild.sh $version

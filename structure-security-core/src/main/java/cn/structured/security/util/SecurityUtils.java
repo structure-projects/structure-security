@@ -1,8 +1,9 @@
 package cn.structured.security.util;
 
 
-import cn.structured.security.entity.StructureAuthUser;
+import cn.structure.common.constant.AuthConstant;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import lombok.experimental.UtilityClass;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -46,7 +47,8 @@ public class SecurityUtils {
     }
 
     public Long getUserId() {
-        StructureAuthUser structureAuthUser = JSON.parseObject(JSON.toJSONString(SecurityUtils.getUser()), StructureAuthUser.class);
-        return Long.parseLong(structureAuthUser.getId().toString());
+        JSONObject authUser = JSON.parseObject(JSON.toJSONString(SecurityUtils.getUser()));
+        Long userId = authUser.getLong(AuthConstant.USER_ID);
+        return null != userId ? userId : authUser.getLong("id");
     }
 }
