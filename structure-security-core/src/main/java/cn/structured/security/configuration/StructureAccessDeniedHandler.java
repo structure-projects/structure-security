@@ -30,15 +30,11 @@ public class StructureAccessDeniedHandler implements AccessDeniedHandler {
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response,
-                       AccessDeniedException accessDeniedException) {
+                       AccessDeniedException accessDeniedException) throws IOException {
         response.setStatus(HttpStatus.OK.value());
         response.setHeader(Header.CONTENT_TYPE.toString(), ContentType.JSON.toString());
-        try {
-            //无权限
-            IResult result = resultUtil.fail(ExceptionRsType.PERMISSION_DENIED.getCode(), accessDeniedException.getMessage());
-            response.getWriter().write(JSON.toJSONString(result));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        //无权限
+        IResult result = resultUtil.fail(ExceptionRsType.PERMISSION_DENIED.getCode(), accessDeniedException.getMessage());
+        response.getWriter().write(JSON.toJSONString(result));
     }
 }

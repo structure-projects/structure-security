@@ -30,15 +30,11 @@ public class StructureAuthenticationEntryPoint implements AuthenticationEntryPoi
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response,
-                         AuthenticationException authException) {
+                         AuthenticationException authException) throws IOException {
         Throwable cause = authException.getCause();
         response.setStatus(HttpStatus.OK.value());
         response.setHeader(Header.CONTENT_TYPE.toString(), ContentType.JSON.toString());
-        try {
-            IResult result = resultUtil.fail(ExceptionRsType.NOT_LOGGED_IN.getCode(), authException.getMessage());
-            response.getWriter().write(JSON.toJSONString(result));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        IResult result = resultUtil.fail(ExceptionRsType.NOT_LOGGED_IN.getCode(), authException.getMessage());
+        response.getWriter().write(JSON.toJSONString(result));
     }
 }
