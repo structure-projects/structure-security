@@ -15,7 +15,7 @@
     <version>1.0-SNAPSHOT</version>
 
     <properties>
-        <structure.version>1.2.8</structure.version>
+        <structure.version>1.2.10</structure.version>
     </properties>
 
     <dependencies>
@@ -42,7 +42,7 @@
         <dependency>
             <groupId>cn.structured</groupId>
             <artifactId>structure-jwt-security-starter</artifactId>
-            <version>1.0.3-SNAPSHOT</version>
+            <version>1.0.4-SNAPSHOT</version>
         </dependency>
     </dependencies>
 
