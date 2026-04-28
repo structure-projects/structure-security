@@ -5,11 +5,12 @@ import cn.structure.starter.jwt.properties.JwtConfig;
 import cn.structured.security.entity.StructureAuthUser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
 import javax.servlet.http.HttpServletRequest;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -36,7 +37,11 @@ public class JwtDefaultServiceImpl implements ITokenService {
 
     @Override
     public Claims getAllClaimsFromToken(String token) {
-        return Jwts.parser().setSigningKey(jwtConfig.getSecret()).parseClaimsJws(token).getBody();
+        return Jwts.parser()
+                .verifyWith(Keys.hmacShaKeyFor(jwtConfig.getSecret().getBytes(StandardCharsets.UTF_8)))
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
     }
 
     @Override
@@ -60,9 +65,13 @@ public class JwtDefaultServiceImpl implements ITokenService {
 
     @Override
     public String doGenerateToken(Map<String, Object> claims, String subject) {
-        return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
+        return Jwts.builder()
+                .setClaims(claims)
+                .setSubject(subject)
+                .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + jwtConfig.getJwtTokenValidity() * 1000))
-                .signWith(SignatureAlgorithm.HS512, jwtConfig.getSecret()).compact();
+                .signWith(Keys.hmacShaKeyFor(jwtConfig.getSecret().getBytes(StandardCharsets.UTF_8)))
+                .compact();
     }
 
     @Override

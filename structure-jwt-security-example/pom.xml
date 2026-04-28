@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-parent</artifactId>
-        <version>2.7.14</version>
+        <version>2.7.18</version>
     </parent>
 
     <groupId>cn.structured</groupId>
@@ -15,7 +15,7 @@
     <version>1.0-SNAPSHOT</version>
 
     <properties>
-        <structure.version>1.2.1.RELEASE</structure.version>
+        <structure.version>1.2.8</structure.version>
     </properties>
 
     <dependencies>
@@ -42,7 +42,7 @@
         <dependency>
             <groupId>cn.structured</groupId>
             <artifactId>structure-jwt-security-starter</artifactId>
-            <version>1.2.1.RELEASE</version>
+            <version>1.0.3-SNAPSHOT</version>
         </dependency>
     </dependencies>
 

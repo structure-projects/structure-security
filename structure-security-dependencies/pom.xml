@@ -6,18 +6,20 @@
 
     <parent>
         <groupId>cn.structured</groupId>
-        <artifactId>structure-boot-parent</artifactId>
-        <version>1.2.2</version>
+        <artifactId>structure-dependencies</artifactId>
+        <version>1.2.8</version>
     </parent>
 
+    <name>structure-security-dependencies</name>
+    <description>structure-security-dependencies</description>
     <artifactId>structure-security-dependencies</artifactId>
     <version>${revision}</version>
     <packaging>pom</packaging>
 
     <properties>
-        <revision>1.0.1</revision>
-        <structure.version>1.2.1.RELEASE</structure.version>
-        <jjwt.version>0.9.1</jjwt.version>
+        <revision>1.0.3-SNAPSHOT</revision>
+        <structure.version>1.2.8</structure.version>
+        <jjwt.version>0.12.7</jjwt.version>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
