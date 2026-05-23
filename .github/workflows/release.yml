@@ -52,12 +52,3 @@ jobs:
         OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
         OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
         GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
-        
-    - name: Upload build artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: maven-artifacts-${{ env.RELEASE_VERSION }}
-        path: |
-          structure-security-dependencies/pom.xml
-          structure-security-core/target/structure-security-core-${{ env.RELEASE_VERSION }}.jar
-          structure-jwt-security-starter/target/structure-jwt-security-starter-${{ env.RELEASE_VERSION }}.jar
