@@ -3,12 +3,12 @@ package cn.structure.starter.jwt.configuration;
 import cn.structure.common.entity.IResult;
 import cn.structure.common.utils.IResultUtil;
 import com.alibaba.fastjson.JSON;
+import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**

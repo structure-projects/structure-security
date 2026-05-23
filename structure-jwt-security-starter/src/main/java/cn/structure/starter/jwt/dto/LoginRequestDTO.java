@@ -1,7 +1,6 @@
 package cn.structure.starter.jwt.dto;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -14,11 +13,11 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-@ApiModel(description = "登录的DTO")
+@Schema(description = "登录的DTO")
 public class LoginRequestDTO {
 
-    @ApiModelProperty(value = "用户名", example = "tom")
+    @Schema(description = "用户名", example = "tom")
     private String username;
-    @ApiModelProperty(value = "密码", example = "123456")
+    @Schema(description = "密码", example = "123456")
     private String password;
 }

@@ -1,6 +1,7 @@
 package cn.structure.starter.jwt.interfaces;
 
-import javax.servlet.Filter;
+
+import jakarta.servlet.Filter;
 
 /**
  * <p>
