@@ -7,7 +7,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
@@ -29,7 +28,7 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
     private ITokenStore iTokenStore;
 
     public LoginFilter() {
-        super(new AntPathRequestMatcher("/login", "POST"));
+        super(request -> "/login".equals(request.getServletPath()) && "POST".equals(request.getMethod()));
     }
 
     @Override
