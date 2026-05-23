@@ -3,9 +3,12 @@ package cn.structure.starter.jwt.properties;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
+import jakarta.annotation.PostConstruct;
 import java.util.List;
 import java.util.Map;
 
@@ -25,6 +28,8 @@ import java.util.Map;
 @ConfigurationProperties("structure.jwt")
 public class JwtConfig {
 
+    private static final Logger logger = LoggerFactory.getLogger(JwtConfig.class);
+
     /**
      * 加密串
      */
@@ -42,27 +47,4 @@ public class JwtConfig {
      */
     private Map<String, List<String>> antMatchers;
 
-    public Map<String, List<String>> getAntMatchers() {
-        return antMatchers;
-    }
-
-    public void setAntMatchers(Map<String, List<String>> antMatchers) {
-        this.antMatchers = antMatchers;
-    }
-
-    public String getSecret() {
-        return this.secret;
-    }
-
-    public void setSecret(String secret) {
-        this.secret = secret;
-    }
-
-    public long getJwtTokenValidity() {
-        return jwtTokenValidity;
-    }
-
-    public void setJwtTokenValidity(long jwtTokenValidity) {
-        this.jwtTokenValidity = jwtTokenValidity;
-    }
 }

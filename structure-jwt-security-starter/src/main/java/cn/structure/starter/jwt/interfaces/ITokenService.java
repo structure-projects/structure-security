@@ -2,8 +2,8 @@ package cn.structure.starter.jwt.interfaces;
 
 import cn.structured.security.entity.StructureAuthUser;
 import io.jsonwebtoken.Claims;
+import jakarta.servlet.http.HttpServletRequest;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 /**

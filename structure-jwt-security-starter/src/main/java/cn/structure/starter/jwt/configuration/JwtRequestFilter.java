@@ -5,16 +5,18 @@ import cn.structure.starter.jwt.interfaces.ITokenService;
 import cn.structure.starter.jwt.interfaces.ITokenStore;
 import cn.structure.starter.jwt.properties.JwtConfig;
 import cn.structured.security.entity.StructureAuthUser;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +26,7 @@ import java.util.Map;
  *
  * @author chuck
  */
+@Slf4j
 @AllArgsConstructor
 public class JwtRequestFilter extends OncePerRequestFilter {
 

@@ -8,18 +8,21 @@ import cn.structure.starter.jwt.enums.LoginErrCodeEnum;
 import cn.structure.starter.jwt.interfaces.ITokenService;
 import cn.structure.starter.jwt.interfaces.ITokenStore;
 import cn.structured.security.entity.StructureAuthUser;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import org.springframework.security.authentication.*;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.LockedException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 
 
 /**
@@ -32,7 +35,7 @@ import javax.servlet.http.HttpServletRequest;
  * @since 2021/7/17 10:53
  */
 @RestController
-@Api(tags = "登录模块")
+@Tag(name = "登录模块")
 @RequestMapping(value = "/api/user")
 public class LoginEndpoint {
 
@@ -46,7 +49,7 @@ public class LoginEndpoint {
     private ITokenService tokenService;
 
     @PostMapping(value = "/login")
-    @ApiOperation(value = "登录请求")
+    @Operation(summary = "登录请求")
     public ResResultVO<String> login(@Validated @RequestBody LoginRequestDTO loginDto) {
         UsernamePasswordAuthenticationToken params = new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword());
         try {
@@ -67,7 +70,7 @@ public class LoginEndpoint {
     }
 
     @PostMapping(value = "/logout")
-    @ApiOperation(value = "登出")
+    @Operation(summary = "登出")
     public ResResultVO<Void> logout(HttpServletRequest request) {
         String token = tokenService.getToken(request);
         tokenStore.clearStore(token);
