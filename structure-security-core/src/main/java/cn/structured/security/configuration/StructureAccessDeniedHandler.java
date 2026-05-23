@@ -6,13 +6,13 @@ import cn.structure.common.entity.IResult;
 import cn.structure.common.enums.ExceptionRsType;
 import cn.structure.common.utils.IResultUtil;
 import com.alibaba.fastjson.JSON;
+import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**

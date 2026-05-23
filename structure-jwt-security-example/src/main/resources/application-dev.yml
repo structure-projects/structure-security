@@ -11,3 +11,5 @@ structure:
         - /webjars/**
         - /swagger-resources/**
         - /v2/api-docs/**
+    observer-enabled: true
+

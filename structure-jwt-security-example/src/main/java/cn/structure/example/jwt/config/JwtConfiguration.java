@@ -16,4 +16,5 @@ public class JwtConfiguration {
     public LoginEndpoint loginEndpoint() {
         return new LoginEndpoint();
     }
+
 }
