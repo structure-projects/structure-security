@@ -8,13 +8,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/test")
 public class Test {
     @RequestMapping("/hello")
-    public String hello(){
+    public String hello() {
         return "hello world";
     }
 
     @RequestMapping("/hello2")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public String hello2(){
+    public String hello2() {
         return "hello world";
     }
 

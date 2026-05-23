@@ -63,7 +63,7 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         Map<String, List<String>> antMatchers = jwtConfig.getAntMatchers();
-        
+
         logger.info("Configuring SecurityFilterChain with antMatchers: {}", antMatchers);
 
         httpSecurity.csrf(AbstractHttpConfigurer::disable)
