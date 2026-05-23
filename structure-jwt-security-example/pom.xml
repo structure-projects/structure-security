@@ -7,13 +7,13 @@
     <parent>
         <groupId>cn.structured</groupId>
         <artifactId>structure-security-dependencies</artifactId>
-        <version>1.1.0-SNAPSHOT</version>
+        <version>${revision}</version>
         <relativePath>../structure-security-dependencies/pom.xml</relativePath>
     </parent>
 
     <groupId>cn.structured</groupId>
     <artifactId>structure-jwt-security-example</artifactId>
-    <version>1.1.0-SNAPSHOT</version>
+    <version>${revision}</version>
 
     <properties>
         <structure.version>1.3.5</structure.version>
