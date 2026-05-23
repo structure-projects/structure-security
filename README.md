@@ -6,11 +6,29 @@
 
 | 技术 | 说明 | 版本 |
 |------|------|------|
-| Spring Boot | Web框架 | 2.7.18 |
-| Spring Security | 安全框架 | 5.7.x |
+| Spring Boot | Web框架 | 3.2.4 |
+| Spring Security | 安全框架 | 6.2.x |
 | JJWT | JWT库 | 0.12.7 |
-| Java | 开发语言 | 8+ |
-| Maven | 项目构建 | 3.x |
+| Java | 开发语言 | 17 (LTS) |
+| Maven | 项目构建 | 3.9+ |
+| Jakarta EE | Servlet API | 6.0 |
+
+## 环境要求
+
+### 运行环境要求
+
+- **JDK 版本**: 17+ (推荐使用 JDK 17 或 JDK 21 LTS)
+- **Maven 版本**: 3.9+
+- **操作系统**: 支持所有主流操作系统 (Windows, Linux, macOS)
+
+### 兼容性矩阵
+
+| JDK 版本 | 支持情况 | 说明 |
+|---------|---------|------|
+| JDK 8-11 | ❌ 不支持 | 需要使用 structure-security 1.0.x 版本 |
+| **JDK 17** | ✅ **完全支持** | **推荐使用 (LTS)** |
+| JDK 21 | ✅ 完全支持 | 推荐使用 (LTS) |
+| JDK 22+ | ✅ 兼容 | 向前兼容 |
 
 ## 模块说明
 
@@ -29,7 +47,7 @@ structure-security/
 <dependency>
     <groupId>cn.structured</groupId>
     <artifactId>structure-jwt-security-starter</artifactId>
-    <version>1.0.3</version>
+    <version>1.1.0</version>
 </dependency>
 ```
 
@@ -164,10 +182,10 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 ```bash
 # 安装依赖并构建
 cd structure-security-dependencies
-mvn clean install -Dmaven.test.skip=true -Drevision=1.0.3
+mvn clean install -Dmaven.test.skip=true -Drevision=1.1.0
 
 # 或使用脚本
-./scripts/install.sh 1.0.3
+./scripts/install.sh 1.1.0
 ```
 
 ### 项目结构
