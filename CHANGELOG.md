@@ -4,7 +4,7 @@
 
 ---
 
-## [1.1.0-SNAPSHOT] - 开发中 (2026-05-23)
+## [1.1.0-SNAPSHOT] - 开发中 (2026-05-24)
 
 ### ⚠️ 重大升级 - JDK & 框架全面升级
 
@@ -15,9 +15,9 @@
 | 组件 | 旧版本 | 新版本 | 变更类型 |
 |------|--------|--------|----------|
 | JDK | 8 | **17** | 🔴 主版本升级 |
-| Spring Boot | 2.7.18 | **3.2.4** | 🔴 主版本升级 |
-| Spring Security | 5.7.x | **6.2.x** | 🔴 主版本升级 |
-| structure-dependencies | 1.2.8 | **1.3.4** | 🔵 小版本升级 |
+| Spring Boot | 2.7.18 | **4.0.6** | 🔴 主版本升级 |
+| Spring Security | 5.7.x | **6.2.3** | 🔴 主版本升级 |
+| structure-dependencies | 1.2.8 | **1.3.6** | 🔵 小版本升级 |
 | Jakarta EE | - | **9+** | 🔴 命名空间迁移 |
 
 #### ✨ 新增功能
@@ -109,9 +109,34 @@ https://docs.spring.io/spring-boot/how-to/migration.html
 - 💾 **内存占用**: 降低约 10-15%
 - 🚀 **吞吐量**: 提升约 15-25% (基于 Spring Boot 3.x 和 JDK 17)
 
+#### 🔧 最近更新 (2026-05-24)
+
+##### 🐛 Bug 修复
+
+- **修复 StructureAuthUser 空指针异常**
+  - `authorities` 字段现在必须初始化，防止 Spring Security 调用 `getAuthorities()` 时出现 NPE
+  - 在 `UserServiceImpl` 示例中添加了权限集合设置代码
+
+- **修复 Spring Boot 4.x 测试包路径问题**
+  - `@AutoConfigureMockMvc` 现在从 `org.springframework.boot.webmvc.test.autoconfigure` 包导入
+  - 新增 `spring-boot-starter-webmvc-test` 测试依赖
+
+##### ✨ 功能增强
+
+- **完善测试用例**
+  - 新增权限不足测试场景（ROLE_SUPER_ADMIN）
+  - 新增普通用户和管理员权限分离测试
+  - 新增重复使用 Token 测试
+  - 所有接口返回统一格式的 `ResResultVO`
+
+- **增强文档示例**
+  - README 中更新了完整的 UserServiceImpl 实现示例
+  - 添加了 authorities 字段的说明
+  - 明确了必须设置权限集合的要求
+
 #### 🔍 已知问题
 
-- 部分第三方库可能尚未完全兼容 Spring Boot 3.x
+- 部分第三方库可能尚未完全兼容 Spring Boot 4.x
 - 需要验证所有自定义过滤器和拦截器的 Jakarta 兼容性
 
 #### 📝 相关文档
@@ -328,7 +353,7 @@ structure-security/
 
 | 版本 | 发布日期 | 状态 | 主要变更 |
 |------|----------|------|----------|
-| [1.1.0-SNAPSHOT](#110-snapshot---开发中-2026-05-23) | 2026-05-23 | 开发中 | JDK 17, Spring Boot 3.2.4 |
+| [1.1.0-SNAPSHOT](#110-snapshot---开发中-2026-05-24) | 2026-05-24 | 开发中 | JDK 17, Spring Boot 4.0.6, 测试增强 |
 | [1.0.3](#103---2026-04-29) | 2026-04-29 | 稳定 | CI/CD, JWT 安全增强 |
 | [1.0.1](#101---2024-08-01) | 2024-08-01 | 稳定 | 版本调整 |
 | [1.0.0](#100---初始版本---2024-07-15) | 2024-07-15 | 稳定 | 初始版本 |

@@ -6,8 +6,8 @@
 
 | 技术 | 说明 | 版本 |
 |------|------|------|
-| Spring Boot | Web框架 | 3.2.4 |
-| Spring Security | 安全框架 | 6.2.x |
+| Spring Boot | Web框架 | 4.0.6 |
+| Spring Security | 安全框架 | 6.2.3 |
 | JJWT | JWT库 | 0.12.7 |
 | Java | 开发语言 | 17 (LTS) |
 | Maven | 项目构建 | 3.9+ |
@@ -90,6 +90,10 @@ public class UserServiceImpl implements UserDetailsService {
         user.setEnable(true);
         user.setUnlocked(true);
         user.setUnexpired(true);
+        
+        // 必须设置 authorities，否则会出现空指针异常
+        List<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
+        user.setAuthorities(authorities);
         return user;
     }
 }
@@ -174,6 +178,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 | `enable` | 是否启用 |
 | `unlocked` | 是否锁定 |
 | `unexpired` | 是否过期 |
+| `authorities` | 用户权限集合 |
 
 ## 开发者维护
 

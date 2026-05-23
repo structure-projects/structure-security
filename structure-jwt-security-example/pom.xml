@@ -11,12 +11,11 @@
         <relativePath>../structure-security-dependencies/pom.xml</relativePath>
     </parent>
 
-    <groupId>cn.structured</groupId>
     <artifactId>structure-jwt-security-example</artifactId>
     <version>${revision}</version>
 
     <properties>
-        <structure.version>1.3.5</structure.version>
+        <structure.version>1.3.6</structure.version>
     </properties>
 
     <dependencies>
@@ -37,7 +36,17 @@
         <dependency>
             <groupId>cn.structured</groupId>
             <artifactId>structure-jwt-security-starter</artifactId>
-            <version>1.1.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webmvc-test</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
