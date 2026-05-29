@@ -7,6 +7,7 @@ import cn.structure.starter.jwt.interfaces.ICorsFilter;
 import cn.structure.starter.jwt.interfaces.ITokenService;
 import cn.structure.starter.jwt.interfaces.ITokenStore;
 import cn.structure.starter.jwt.properties.JwtConfig;
+import cn.structure.starter.jwt.properties.SecurityConfig;
 import jakarta.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +27,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Security 配置
@@ -50,7 +50,7 @@ public class WebSecurityConfig {
     private ITokenService tokenService;
 
     @Resource
-    private JwtConfig jwtConfig;
+    private SecurityConfig securityConfig;
 
     @Resource
     private ITokenStore tokenStore;
@@ -62,17 +62,18 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-        Map<String, List<String>> antMatchers = jwtConfig.getAntMatchers();
+        Map<String, List<String>> antMatchers = securityConfig.getAntMatchers();
 
         logger.info("Configuring SecurityFilterChain with antMatchers: {}", antMatchers);
 
         httpSecurity.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> {
                     if (antMatchers != null) {
-                        Set<String> keys = antMatchers.keySet();
-                        for (String key : keys) {
-                            if (key.equals(AuthConstant.UN_AUTHENTICATED)) {
-                                List<String> urls = antMatchers.get(key);
+                        for (Map.Entry<String, List<String>> entry : antMatchers.entrySet()) {
+                            String key = entry.getKey();
+                            List<String> urls = entry.getValue();
+
+                            if (AuthConstant.UN_AUTHENTICATED.equals(key)) {
                                 logger.info("Permitting unauthenticated URLs: {}", urls);
                                 for (String url : urls) {
                                     authorize.requestMatchers(url).permitAll();
@@ -84,13 +85,12 @@ public class WebSecurityConfig {
                                 }
                                 String type = authUrlStr[NumberEnum.ZERO.getValue()];
                                 String str = authUrlStr[NumberEnum.ONE.getValue()];
-                                List<String> urls = antMatchers.get(key);
                                 for (String url : urls) {
-                                    if (type.equals(AuthConstant.ROLE)) {
+                                    if (AuthConstant.ROLE.equals(type)) {
                                         logger.info("Configuring ROLE access for {}: {}", str, url);
                                         authorize.requestMatchers(url).hasRole(str);
                                     }
-                                    if (type.equals(AuthConstant.AUTH)) {
+                                    if (AuthConstant.AUTH.equals(type)) {
                                         logger.info("Configuring AUTHORITY access for {}: {}", str, url);
                                         authorize.requestMatchers(url).hasAuthority(str);
                                     }
@@ -107,9 +107,9 @@ public class WebSecurityConfig {
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 );
-        httpSecurity.addFilterBefore(new JwtRequestFilter(tokenService, jwtConfig, tokenStore), UsernamePasswordAuthenticationFilter.class);
+        httpSecurity.addFilterBefore(new JwtRequestFilter(tokenService, securityConfig, tokenStore), UsernamePasswordAuthenticationFilter.class);
 
-        Class<?> aClass = Class.forName(jwtConfig.getCorsFilterClass());
+        Class<?> aClass = Class.forName(securityConfig.getCorsFilterClass());
         ICorsFilter iCorsFilter = (ICorsFilter) aClass.getDeclaredConstructor().newInstance();
         httpSecurity.addFilterBefore(iCorsFilter, JwtRequestFilter.class);
 

@@ -4,6 +4,7 @@ import cn.structure.common.constant.AuthConstant;
 import cn.structure.starter.jwt.interfaces.ITokenService;
 import cn.structure.starter.jwt.interfaces.ITokenStore;
 import cn.structure.starter.jwt.properties.JwtConfig;
+import cn.structure.starter.jwt.properties.SecurityConfig;
 import cn.structured.security.entity.StructureAuthUser;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -32,7 +33,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
     private ITokenService iTokenService;
 
-    private JwtConfig jwtConfig;
+    private SecurityConfig securityConfig;
 
     private ITokenStore tokenStore;
 
@@ -42,7 +43,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         // 放行资源和登录
         String requestUri = request.getRequestURI();
-        Map<String, List<String>> antMatchers = jwtConfig.getAntMatchers();
+        Map<String, List<String>> antMatchers = securityConfig.getAntMatchers();
 
         List<String> unAuthenticated = antMatchers.get(AuthConstant.UN_AUTHENTICATED);
         AntPathMatcher matcher = new AntPathMatcher();

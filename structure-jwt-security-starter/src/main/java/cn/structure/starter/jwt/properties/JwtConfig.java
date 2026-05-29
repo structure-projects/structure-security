@@ -9,16 +9,14 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 import jakarta.annotation.PostConstruct;
-import java.util.List;
-import java.util.Map;
 
 /**
  * <p>
- * Jwt配置
+ * JWT 认证配置
  * </p>
  *
  * @author chuck
- * @version 1.0.1
+ * @version 1.1.0
  * @since 2021/7/10 19:58
  */
 @Getter
@@ -31,20 +29,20 @@ public class JwtConfig {
     private static final Logger logger = LoggerFactory.getLogger(JwtConfig.class);
 
     /**
-     * 加密串
+     * JWT 加密密钥
      */
     private String secret = "JWT";
 
     /**
-     * token 有效时间
+     * Token 有效时间（秒）
+     * 默认 9 小时
      */
     private long jwtTokenValidity = 9 * 60 * 60;
 
-    private String corsFilterClass = "cn.structure.starter.jwt.configuration.CorsFilter";
-
-    /**
-     * 访问权限
-     */
-    private Map<String, List<String>> antMatchers;
+    @PostConstruct
+    public void init() {
+        logger.info("JWT configuration initialized: secret length={}, validity={}s",
+                secret != null ? secret.length() : 0, jwtTokenValidity);
+    }
 
 }

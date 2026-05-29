@@ -5,6 +5,7 @@ import cn.structure.common.utils.ResultUtilSimpleImpl;
 import cn.structure.starter.jwt.interfaces.ITokenService;
 import cn.structure.starter.jwt.interfaces.ITokenStore;
 import cn.structure.starter.jwt.properties.JwtConfig;
+import cn.structure.starter.jwt.properties.SecurityConfig;
 import cn.structure.starter.jwt.service.DefaultUserServiceImpl;
 import cn.structure.starter.jwt.service.InnerTokenStore;
 import cn.structured.security.configuration.StructureAccessDeniedHandler;
@@ -32,7 +33,7 @@ import org.springframework.security.web.access.AccessDeniedHandler;
  * @since 2021/7/10 20:06
  */
 @Configuration
-@EnableConfigurationProperties({JwtConfig.class})
+@EnableConfigurationProperties({JwtConfig.class, SecurityConfig.class})
 @ComponentScan(value = {"cn.structure.starter.jwt.configuration", "cn.structure.starter.jwt.filter"})
 public class AutoConfiguration {
 

@@ -134,6 +134,12 @@ https://docs.spring.io/spring-boot/how-to/migration.html
   - 添加了 authorities 字段的说明
   - 明确了必须设置权限集合的要求
 
+- **配置文件优化**
+  - 新增独立的安全配置文件 `security/application-security.yml`
+  - 新增生产环境配置 `security/application-prod.yml`
+  - 新增测试环境配置 `test/resources/application-test.yml`
+  - 添加详细的配置说明和最佳实践
+
 #### 🔍 已知问题
 
 - 部分第三方库可能尚未完全兼容 Spring Boot 4.x
