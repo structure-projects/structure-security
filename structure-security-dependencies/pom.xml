@@ -82,6 +82,10 @@
     <modules>
         <module>../structure-security-core</module>
         <module>../structure-jwt-security-starter</module>
+        <module>../structure-oauth-api</module>
+        <module>../structure-oauth-sdk</module>
+        <module>../structure-oauth-common</module>
+        <module>../structure-oauth-resource-starter</module>
     </modules>
 
     <dependencyManagement>
@@ -123,6 +127,11 @@
                 <artifactId>lombok</artifactId>
                 <version>${lombok.version}</version>
                 <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-starter-webmvc-api</artifactId>
+                <version>2.3.0</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework.boot</groupId>
