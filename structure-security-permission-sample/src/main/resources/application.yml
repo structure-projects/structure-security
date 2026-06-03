@@ -1,0 +1,24 @@
+# 应用配置
+spring:
+  main:
+    allow-circular-references: true
+server:
+  port: 8080
+
+# JWT 配置
+structure:
+  jwt:
+    secret: structure-security-jwt-secret-key
+    jwt-token-validity: 3600
+
+  # 权限模块配置 - Context 模式（从上下文获取权限）
+  security:
+    permission:
+      enabled: true
+      provider-type: context
+
+# 日志配置
+logging:
+  level:
+    cn.structured: DEBUG
+    org.springframework.security: DEBUG

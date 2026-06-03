@@ -34,7 +34,8 @@ import org.springframework.security.web.access.AccessDeniedHandler;
  */
 @Configuration
 @EnableConfigurationProperties({JwtConfig.class, SecurityConfig.class})
-@ComponentScan(value = {"cn.structure.starter.jwt.configuration", "cn.structure.starter.jwt.filter"})
+@ComponentScan(value = {"cn.structure.starter.jwt.configuration",
+        "cn.structure.starter.jwt.filter"})
 public class AutoConfiguration {
 
     @Resource

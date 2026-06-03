@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -60,6 +61,15 @@ public class JwtDefaultServiceImpl implements ITokenService {
         Map<String, Object> claims = new HashMap<>();
         claims.put("id", userDetails.getId());
         claims.put("username", userDetails.getUsername());
+        return doGenerateToken(claims, userDetails.getUsername());
+    }
+
+    @Override
+    public String generateTokenWithPermissions(StructureAuthUser userDetails, List<String> permissions) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("id", userDetails.getId());
+        claims.put("username", userDetails.getUsername());
+        claims.put("authorities", permissions);
         return doGenerateToken(claims, userDetails.getUsername());
     }
 

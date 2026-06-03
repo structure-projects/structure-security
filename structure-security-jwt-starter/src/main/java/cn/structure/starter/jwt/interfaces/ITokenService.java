@@ -4,6 +4,7 @@ import cn.structured.security.entity.StructureAuthUser;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -47,6 +48,15 @@ public interface ITokenService {
      * @return {@link String}
      */
     String generateToken(StructureAuthUser userDetails);
+
+    /**
+     * 通过用户信息和权限列表生成token
+     *
+     * @param userDetails 用户详情
+     * @param permissions 权限列表
+     * @return {@link String}
+     */
+    String generateTokenWithPermissions(StructureAuthUser userDetails, List<String> permissions);
 
     /**
      * 通过claims生成token

@@ -3,11 +3,11 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <groupId>cn.structured</groupId>
-  <artifactId>structure-security-core</artifactId>
+  <artifactId>structure-security-permission-sample</artifactId>
   <version>1.1.1-SNAPSHOT</version>
-  <name>structure-security-core</name>
-  <description>structure-jwt-security</description>
-  <url>https://projects.structured.cn/structure-security</url>
+  <name>structure-security-permission-sample</name>
+  <description>Permission Module Sample Application</description>
+  <url>https://projects.structured.cn/structure-boot/structure-security-permission-sample</url>
   <inceptionYear>2021</inceptionYear>
   <organization>
     <name>structure</name>
@@ -31,9 +31,9 @@
     </developer>
   </developers>
   <scm>
-    <connection>scm:git:git://github.com/structure-projects/structure-security.git</connection>
-    <developerConnection>scm:git:ssh://git@github.com:structure-projects/structure-security.git</developerConnection>
-    <url>https://github.com/structure-projects/structure-security</url>
+    <connection>scm:git:git://github.com/structure-projects/structure-security.git/structure-security-permission-sample</connection>
+    <developerConnection>scm:git:ssh://git@github.com:structure-projects/structure-security.git/structure-security-permission-sample</developerConnection>
+    <url>https://github.com/structure-projects/structure-security/structure-security-permission-sample</url>
   </scm>
   <issueManagement>
     <system>Github</system>
@@ -48,20 +48,26 @@
   <dependencies>
     <dependency>
       <groupId>cn.structured</groupId>
+      <artifactId>structure-security-permission-starter</artifactId>
+      <version>1.1.1-SNAPSHOT</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>cn.structured</groupId>
+      <artifactId>structure-security-jwt-starter</artifactId>
+      <version>1.1.1-SNAPSHOT</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>cn.structured</groupId>
       <artifactId>structure-common</artifactId>
       <version>1.3.6</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-security</artifactId>
+      <artifactId>spring-boot-starter-web</artifactId>
       <version>4.0.6</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.security</groupId>
-      <artifactId>spring-security-web</artifactId>
-      <version>7.0.5</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
@@ -71,15 +77,15 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>jakarta.servlet</groupId>
-      <artifactId>jakarta.servlet-api</artifactId>
-      <version>6.0.0</version>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <version>4.0.6</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
-      <groupId>jakarta.annotation</groupId>
-      <artifactId>jakarta.annotation-api</artifactId>
-      <version>2.1.1</version>
+      <groupId>org.springframework.security</groupId>
+      <artifactId>spring-security-test</artifactId>
+      <version>7.0.5</version>
       <scope>compile</scope>
     </dependency>
   </dependencies>
