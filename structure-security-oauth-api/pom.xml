@@ -9,7 +9,6 @@
         <relativePath>../structure-security-dependencies/pom.xml</relativePath>
     </parent>
 
-    <version>${revision}</version>
     <modelVersion>4.0.0</modelVersion>
 
     <name>structure-security-oauth-api</name>

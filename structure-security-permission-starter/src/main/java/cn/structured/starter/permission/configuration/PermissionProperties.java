@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import jakarta.annotation.PostConstruct;
+import java.time.Duration;
 
 /**
  * 权限配置属性
@@ -21,8 +22,11 @@ import jakarta.annotation.PostConstruct;
  *   security:
  *     permission:
  *       enabled: true
- *       providerType: context
+ *       providerType: remote
  *       remoteUrl: https://auth-server/api/permissions/{userId}
+ *       cache:
+ *         enabled: true
+ *         ttl: 30m
  * }
  * </pre>
  * </p>
@@ -54,9 +58,34 @@ public class PermissionProperties {
      */
     private String providerType = "context";
 
+    /**
+     * 缓存配置
+     */
+    private Cache cache = new Cache();
+
+    @Getter
+    @Setter
+    @ToString
+    public static class Cache {
+        /**
+         * 是否启用远程权限缓存（仅 remote 模式有效）
+         */
+        private boolean enabled = true;
+
+        /**
+         * 缓存过期时间，默认 30 分钟
+         */
+        private Duration ttl = Duration.ofMinutes(30);
+
+        /**
+         * 缓存最大容量，默认 10000
+         */
+        private int maxSize = 10000;
+    }
+
     @PostConstruct
     public void init() {
-        logger.info("Permission properties initialized: enabled={}, remoteUrl={}, providerType={}",
-                enabled, remoteUrl, providerType);
+        logger.info("Permission properties initialized: enabled={}, remoteUrl={}, providerType={}, cache={}",
+                enabled, remoteUrl, providerType, cache);
     }
 }

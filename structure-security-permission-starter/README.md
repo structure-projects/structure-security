@@ -156,6 +156,7 @@ structure-security-permission-starter/
 ├── permission/
 │   ├── ContextPermissionProvider.java   # 上下文权限提供者
 │   ├── RemotePermissionProvider.java    # 远程权限提供者
+│   ├── CachedRemotePermissionProvider.java # 带缓存的远程权限提供者
 │   ├── PermissionServiceImpl.java       # 权限服务实现
 │   ├── PermissionProperties.java        # 配置属性
 │   └── PermissionAutoConfiguration.java # 自动配置
@@ -240,86 +241,71 @@ public IPermissionProvider customPermissionProvider() {
 
 ## 缓存机制（Remote 模式）
 
-### 缓存策略
+Remote 模式支持两种模式：
+- **带缓存模式（默认）**：使用 Caffeine 高性能本地缓存，减少远程调用
+- **无缓存模式**：每次都调用远程接口获取最新权限
 
-远程模式下，每次请求都会调用远程权限服务获取权限，这可能导致性能问题。建议在生产环境中实现缓存机制。
+### 带缓存模式（推荐）
 
-### 推荐的缓存实现
+**配置：**
+```yaml
+structure:
+  security:
+    permission:
+      provider-type: remote
+      remote-url: https://auth-server/api/permissions/{userId}
+      cache:
+        enabled: true          # 启用缓存（默认 true）
+        ttl: 30m               # 缓存过期时间（默认 30 分钟）
+        max-size: 10000        # 缓存最大容量（默认 10000）
+```
+
+**功能特性：**
+- 基于 Caffeine 高性能缓存库
+- 支持 TTL 过期策略
+- 支持最大容量限制
+- 提供手动刷新接口
+- 内置缓存统计信息
+
+**使用方式：**
 
 ```java
-public class CachedRemotePermissionProvider implements IPermissionProvider {
+// 注入权限提供者
+@Autowired
+private IPermissionProvider permissionProvider;
 
-    private final RemotePermissionProvider delegate;
-    private final Map<String, CachedPermissions> cache = new ConcurrentHashMap<>();
+// 手动刷新指定用户的权限缓存
+if (permissionProvider instanceof CachedRemotePermissionProvider) {
+    CachedRemotePermissionProvider cachedProvider = (CachedRemotePermissionProvider) permissionProvider;
+    cachedProvider.refreshPermissions("123"); // 刷新用户 123 的权限
+    cachedProvider.refreshAllPermissions();   // 刷新所有用户的权限
     
-    // 缓存过期时间（默认5分钟）
-    private static final long CACHE_EXPIRE_MS = 5 * 60 * 1000;
-
-    public CachedRemotePermissionProvider(RestTemplate restTemplate, String permissionUrl) {
-        this.delegate = new RemotePermissionProvider(restTemplate, permissionUrl);
-    }
-
-    @Override
-    public Set<UserPerm> getPermissions(String userId) {
-        if (userId == null) {
-            return Collections.emptySet();
-        }
-
-        CachedPermissions cached = cache.get(userId);
-        
-        // 检查缓存是否有效
-        if (cached != null && !cached.isExpired()) {
-            return cached.getPermissions();
-        }
-
-        // 缓存失效，从远程获取
-        Set<UserPerm> permissions = delegate.getPermissions(userId);
-        
-        // 更新缓存
-        cache.put(userId, new CachedPermissions(permissions));
-        
-        return permissions;
-    }
-
-    /**
-     * 手动刷新指定用户的权限缓存
-     */
-    public void refreshCache(String userId) {
-        cache.remove(userId);
-    }
-
-    /**
-     * 手动刷新所有用户的权限缓存
-     */
-    public void refreshAllCache() {
-        cache.clear();
-    }
-
-    private static class CachedPermissions {
-        private final Set<UserPerm> permissions;
-        private final long timestamp;
-
-        public CachedPermissions(Set<UserPerm> permissions) {
-            this.permissions = permissions;
-            this.timestamp = System.currentTimeMillis();
-        }
-
-        public boolean isExpired() {
-            return System.currentTimeMillis() - timestamp > CACHE_EXPIRE_MS;
-        }
-
-        public Set<UserPerm> getPermissions() {
-            return permissions;
-        }
-    }
+    // 获取缓存统计信息
+    CachedRemotePermissionProvider.CacheStats stats = cachedProvider.getCacheStats();
+    System.out.println("缓存命中率: " + stats.getHitRate());
 }
 ```
+
+### 无缓存模式
+
+**配置：**
+```yaml
+structure:
+  security:
+    permission:
+      provider-type: remote
+      remote-url: https://auth-server/api/permissions/{userId}
+      cache:
+        enabled: false  # 禁用缓存
+```
+
+每次权限检查都会调用远程接口，确保权限实时性。
 
 ### 缓存配置建议
 
 | 场景 | 缓存策略 | 过期时间建议 |
 |------|---------|-------------|
-| 开发环境 | 禁用缓存 | 0 |
+| 开发环境 | 禁用缓存 | - |
 | 测试环境 | 短缓存 | 1-5分钟 |
 | 生产环境 | 中长缓存 | 5-30分钟 |
 | 高安全要求 | 短缓存或禁用 | 1-5分钟 |

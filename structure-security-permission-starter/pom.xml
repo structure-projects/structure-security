@@ -10,8 +10,6 @@
         <relativePath>../structure-security-dependencies/pom.xml</relativePath>
     </parent>
 
-    <version>${revision}</version>
-
     <packaging>jar</packaging>
     <artifactId>structure-security-permission-starter</artifactId>
     <name>structure-security-permission-starter</name>
@@ -75,6 +73,11 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.github.ben-manes.caffeine</groupId>
+            <artifactId>caffeine</artifactId>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>jakarta.servlet</groupId>

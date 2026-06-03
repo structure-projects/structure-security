@@ -2,10 +2,12 @@ package cn.structured.starter.permission.configuration;
 
 import cn.structured.security.permission.IPermissionProvider;
 import cn.structured.security.permission.IPermissionService;
-import cn.structured.starter.permission.provider.RemotePermissionProvider;
+import cn.structured.starter.permission.provider.CachedRemotePermissionProvider;
 import cn.structured.starter.permission.provider.ContextPermissionProvider;
+import cn.structured.starter.permission.provider.RemotePermissionProvider;
 import cn.structured.starter.permission.service.PermissionServiceImpl;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -31,10 +33,18 @@ import org.springframework.web.client.RestTemplate;
  * </ul>
  * </p>
  * 
- * <p>权限提供者选择：
+ * <p>权限提供者类型：
  * <ul>
  *   <li>context - 从 Spring Security 上下文获取（默认）</li>
  *   <li>remote - 从远程授权服务器获取</li>
+ * </ul>
+ * </p>
+ * 
+ * <p>远程模式缓存配置：
+ * <ul>
+ *   <li>structure.security.permission.cache.enabled=true - 启用远程权限缓存（默认）</li>
+ *   <li>structure.security.permission.cache.ttl=30m - 缓存过期时间</li>
+ *   <li>structure.security.permission.cache.maxSize=10000 - 缓存最大容量</li>
  * </ul>
  * </p>
  */
@@ -69,7 +79,7 @@ public class PermissionAutoConfiguration {
     }
 
     /**
-     * 创建远程权限提供者
+     * 创建远程权限提供者（无缓存）
      * 
      * @param properties 权限配置属性
      * @param restTemplate RestTemplate 实例
@@ -77,10 +87,33 @@ public class PermissionAutoConfiguration {
      */
     @Bean
     @ConditionalOnProperty(prefix = "structure.security.permission", name = "providerType", havingValue = "remote")
+    @ConditionalOnProperty(prefix = "structure.security.permission.cache", name = "enabled", havingValue = "false")
     @ConditionalOnMissingBean(IPermissionProvider.class)
-    public IPermissionProvider remotePermissionProvider(PermissionProperties properties, RestTemplate restTemplate) {
-        log.info("Initializing RemotePermissionProvider with url: {}", properties.getRemoteUrl());
+    public IPermissionProvider remotePermissionProviderWithoutCache(PermissionProperties properties, RestTemplate restTemplate) {
+        log.info("Initializing RemotePermissionProvider (no cache) with url: {}", properties.getRemoteUrl());
         return new RemotePermissionProvider(restTemplate, properties.getRemoteUrl());
+    }
+
+    /**
+     * 创建带缓存的远程权限提供者
+     * 
+     * @param properties 权限配置属性
+     * @param restTemplate RestTemplate 实例
+     * @return CachedRemotePermissionProvider 实例
+     */
+    @Bean
+    @ConditionalOnClass(name = "com.github.benmanes.caffeine.cache.Cache")
+    @ConditionalOnProperty(prefix = "structure.security.permission", name = "providerType", havingValue = "remote")
+    @ConditionalOnProperty(prefix = "structure.security.permission.cache", name = "enabled", havingValue = "true", matchIfMissing = true)
+    @ConditionalOnMissingBean(IPermissionProvider.class)
+    public IPermissionProvider cachedRemotePermissionProvider(PermissionProperties properties, RestTemplate restTemplate) {
+        RemotePermissionProvider remoteProvider = new RemotePermissionProvider(restTemplate, properties.getRemoteUrl());
+        log.info("Initializing CachedRemotePermissionProvider with url: {}, cache: {}", properties.getRemoteUrl(), properties.getCache());
+        return new CachedRemotePermissionProvider(
+                remoteProvider,
+                properties.getCache().getTtl(),
+                properties.getCache().getMaxSize()
+        );
     }
 
     /**
@@ -92,7 +125,7 @@ public class PermissionAutoConfiguration {
     @Bean("permissionService")
     @ConditionalOnMissingBean(IPermissionService.class)
     public IPermissionService permissionService(IPermissionProvider permissionProvider) {
-        log.info("Initializing PermissionService");
+        log.info("Initializing PermissionService with provider: {}", permissionProvider.getClass().getSimpleName());
         return new PermissionServiceImpl(permissionProvider);
     }
 }

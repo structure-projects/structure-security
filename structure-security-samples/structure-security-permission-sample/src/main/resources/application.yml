@@ -1,0 +1,37 @@
+# 应用配置
+spring:
+  main:
+    allow-circular-references: true
+server:
+  port: 8080
+
+# JWT 配置
+structure:
+  jwt:
+    secret: structure-security-jwt-secret-key
+    jwt-token-validity: 3600
+  security:
+    permission:
+      enabled: true
+      provider-type: context
+    # 是否启用安全框架
+    enabled: true
+    # 默认登录页面（API 模式可为空）
+    default-login-url: /api/user/login
+    # CORS 跨域过滤器类
+    # 一般不需要修改
+    corsFilterClass: cn.structure.starter.jwt.configuration.CorsFilter
+    # Ant 风格路径匹配配置
+    antMatchers:
+      # 不需要认证的接口（白名单）
+      # 这些接口不需要登录即可访问
+      unAuthenticated:
+        # 登录接口
+        - /api/user/login
+        - /api/permissions/**
+
+# 日志配置
+logging:
+  level:
+    cn.structured: DEBUG
+    org.springframework.security: DEBUG

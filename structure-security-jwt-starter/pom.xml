@@ -9,8 +9,6 @@
         <relativePath>../structure-security-dependencies/pom.xml</relativePath>
     </parent>
 
-    <version>${revision}</version>
-
     <modelVersion>4.0.0</modelVersion>
 
     <packaging>jar</packaging>

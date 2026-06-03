@@ -1,0 +1,24 @@
+# 应用配置
+server:
+  port: 8080
+
+# Spring Security 配置
+spring:
+  security:
+    user:
+      name: test
+      password: password
+
+# 权限模块配置 - Remote 模式（从远程服务器获取权限）
+structure:
+  security:
+    permission:
+      enabled: true
+      provider-type: remote
+      remote-url: http://localhost:8080/api/permissions/{userId}
+
+# 日志配置
+logging:
+  level:
+    cn.structured: DEBUG
+    org.springframework.security: DEBUG

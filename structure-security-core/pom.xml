@@ -10,8 +10,6 @@
         <relativePath>../structure-security-dependencies/pom.xml</relativePath>
     </parent>
 
-    <version>${revision}</version>
-
     <packaging>jar</packaging>
     <artifactId>structure-security-core</artifactId>
     <name>structure-security-core</name>
