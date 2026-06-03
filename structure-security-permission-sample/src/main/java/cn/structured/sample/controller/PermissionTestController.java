@@ -81,7 +81,7 @@ public class PermissionTestController {
      * 需要 *:read 权限（动作级通配）
      */
     @GetMapping("/user/{id}")
-    @PreAuthorize("@permissionService.hasPermission('*:read')")
+    @PreAuthorize("@permissionService.hasPermission('user:read')")
     public Map<String, Object> getUser(@PathVariable Long id) {
         log.info("Getting user {} with permissions check passed", id);
         Map<String, Object> result = new HashMap<>();
