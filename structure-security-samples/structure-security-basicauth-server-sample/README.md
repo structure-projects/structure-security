@@ -1,100 +1,79 @@
-# Basic Auth Server Sample
+# Basic Auth Server 示例
 
-Basic Auth 服务端示例工程，集成了 JWT
+演示如何使用 Spring Security 内置的 Basic Auth 认证。
 
 ## 功能特点
 
-- Basic Auth 认证
-- JWT Token 认证
-- 两种认证方式共存
-- 权限控制
+- 使用 Spring Security 内置的 httpBasic() 认证
+- 内存用户存储，支持 admin 和 user 两个账号
+- 受保护的 REST API 端点
 
 ## 快速开始
 
-### 1. 运行应用
+### 1. 启动服务端
 
 ```bash
+cd structure-security-basicauth-server-sample
 mvn spring-boot:run
 ```
 
-### 2. 测试接口
-
-#### 测试用户
-
-- `admin/admin123`
-- `user/user123`
-
-#### Basic Auth 方式
+### 2. 测试 Basic Auth 认证
 
 ```bash
-# 使用 Basic Auth 直接访问受保护接口
+# 使用 -u 参数
 curl -u admin:admin123 http://localhost:8082/api/protected/hello
 
-# 或者使用完整 Header
-curl http://localhost:8082/api/protected/hello \
-  -H "Authorization: Basic YWRtaW46YWRtaW4xMjM="
+# 使用 -H 参数直接设置 Authorization 头
+curl http://localhost:8082/api/protected/hello -H "Authorization: Basic YWRtaW46YWRtaW4xMjM="
 ```
 
-#### JWT 方式
+### 3. 查看用户信息
 
 ```bash
-# 1. 登录获取 JWT Token
-curl -X POST http://localhost:8082/api/user/login \
-  -H "Content-Type: application/json" \
-  -d '{"username":"admin","password":"admin123"}'
-
-# 2. 使用 Token 访问
-curl http://localhost:8082/api/protected/hello \
-  -H "Authorization: Bearer <your_token>"
+curl -u admin:admin123 http://localhost:8082/api/protected/user-info
 ```
 
-#### 查看帮助
+### 4. 测试无权限访问
 
 ```bash
-curl http://localhost:8082/api/public/help
+# 不带认证，会返回 401
+curl http://localhost:8082/api/protected/hello
 ```
 
-## 认证方式说明
+## 测试账号
 
-### Basic Auth 流程
+| 用户名 | 密码 | 角色 |
+|--------|------|------|
+| admin | admin123 | ROLE_ADMIN |
+| user | user123 | ROLE_USER |
 
-1. 客户端将用户名密码用冒号连接，Base64 编码
-2. 在请求头中添加 `Authorization: Basic <encoded>`
-3. 服务器验证凭证
+## 核心代码说明
 
-### JWT 流程
+### SecurityConfig
 
-1. 使用 `/api/user/login` 登录获取 Token
-2. 使用 `Authorization: Bearer <token>` 访问资源
+使用 Spring Security 内置的 httpBasic() 认证：
 
-## 配置说明
-
-```yaml
-structure:
-  security:
-    basicauth:
-      server:
-        enabled: true
-        realm: "Basic Auth Demo"
-        users:
-          admin: admin123
-          user: user123
-    jwt:
-      secret: your-secret-key
+```java
+http
+    .csrf(AbstractHttpConfigurer::disable)
+    .authorizeHttpRequests(authorize -> authorize
+        .requestMatchers("/api/public/**").permitAll()
+        .anyRequest().authenticated()
+    )
+    .httpBasic(httpBasic -> {});
 ```
 
-## 项目依赖
+## API 说明
 
-```xml
-<dependency>
-    <groupId>cn.structured</groupId>
-    <artifactId>structure-security-basicauth-server</artifactId>
-</dependency>
-<dependency>
-    <groupId>cn.structured</groupId>
-    <artifactId>structure-security-jwt-starter</artifactId>
-</dependency>
-```
+### 公开接口（无需认证）
+
+- `GET /api/public/demo` - 演示接口
+- `GET /api/public/help` - 帮助信息
+
+### 受保护接口（需要 Basic Auth）
+
+- `GET /api/protected/hello` - 欢迎接口
+- `GET /api/protected/user-info` - 用户信息接口
 
 ## License
 

@@ -1,4 +1,4 @@
 #Auto Configuration
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  cn.structured.oauth.sdk.configuration.AutoClientConfiguration,\
-  cn.structured.oauth.sdk.configuration.AuthClientConfig
+  cn.structured.security.oauth.sdk.configuration.AutoClientConfiguration,\
+  cn.structured.security.oauth.sdk.configuration.AuthClientConfig

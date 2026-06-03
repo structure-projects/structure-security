@@ -1,1 +1,0 @@
-package cn.structured.oauth.starter.resource;

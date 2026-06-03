@@ -1,8 +1,7 @@
 package cn.structured.security.basicauth.server.filter;
 
-import cn.structured.security.basicauth.client.BasicAuthGenerator;
 import cn.structured.security.basicauth.server.interfaces.CredentialValidator;
-import cn.structured.security.basicauth.server.properties.BasicAuthServerProperties;
+import cn.structured.security.common.util.BasicAuthGenerator;
 import cn.structured.security.entity.StructureAuthUser;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -31,7 +30,6 @@ import java.util.Collections;
 @RequiredArgsConstructor
 public class BasicAuthFilter extends OncePerRequestFilter {
 
-    private final BasicAuthServerProperties properties;
     private final CredentialValidator credentialValidator;
     private final AuthenticationEntryPoint authenticationEntryPoint;
 

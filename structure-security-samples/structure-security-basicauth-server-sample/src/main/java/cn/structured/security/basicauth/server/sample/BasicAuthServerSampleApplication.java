@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
  * Basic Auth 服务端示例应用
- * 演示如何集成 Basic Auth 和 JWT
+ * 使用 Spring Security 内置的 httpBasic() 认证
  *
  * @author chuck
  */
@@ -18,8 +18,6 @@ public class BasicAuthServerSampleApplication {
         SpringApplication.run(BasicAuthServerSampleApplication.class, args);
         
         log.info("Basic Auth Server Sample Application Started!");
-        log.info("Demo credentials:");
-        log.info("  - admin/admin123");
-        log.info("  - user/user123");
+        log.info("Test with: curl -u admin:admin123 http://localhost:8082/api/protected/hello");
     }
 }

@@ -40,10 +40,9 @@ public class BasicAuthServerAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public BasicAuthFilter basicAuthFilter(BasicAuthServerProperties properties,
-                                           CredentialValidator credentialValidator,
+    public BasicAuthFilter basicAuthFilter(CredentialValidator credentialValidator,
                                            AuthenticationEntryPoint authenticationEntryPoint) {
         log.info("Initializing BasicAuthFilter");
-        return new BasicAuthFilter(properties, credentialValidator, authenticationEntryPoint);
+        return new BasicAuthFilter( credentialValidator, authenticationEntryPoint);
     }
 }

@@ -1,72 +1,71 @@
-# Basic Auth Client Sample
+# Basic Auth Client 示例
 
-Basic Auth 客户端示例工程
+演示作为 client 如何调用需要 Basic Auth 的 server
 
 ## 功能特点
 
-- 演示如何使用 Basic Auth 发送标准请求
-- Basic Auth 头的生成和解析
-- 演示如何使用 WebClient 发送带 Basic Auth 的请求
+- 使用 RestTemplate 调用需要 Basic Auth 认证的服务端
+- 演示如何生成和使用 Basic Auth header
 
 ## 快速开始
 
-### 1. 运行应用
+### 1. 启动服务端
+
+首先需要启动 Basic Auth Server 示例：
+
+```bash
+cd ../structure-security-basicauth-server-sample
+mvn spring-boot:run
+```
+
+### 2. 启动客户端
 
 ```bash
 mvn spring-boot:run
 ```
 
-### 2. 测试接口
+### 3. 测试接口
 
-#### 生成 Basic Auth 头
-
-```bash
-curl -X POST "http://localhost:8081/api/client/generate?username=admin&password=admin123"
-```
-
-#### 解析 Basic Auth 头
-
-```bash
-curl -X POST http://localhost:8081/api/client/parse \
-  -H "Authorization: Basic YWRtaW46YWRtaW4xMjM="
-```
-
-#### 查看使用演示
+#### 查看演示信息
 
 ```bash
 curl http://localhost:8081/api/client/demo
 ```
 
-## 主要 API 概述
-
-### BasicAuthGenerator
-
-```java
-// 生成 Basic Auth 头
-String authHeader = BasicAuthGenerator.generate("admin", "admin123");
-
-// 解析 Basic Auth 头
-String[] credentials = BasicAuthGenerator.parse(authHeader);
-```
-
-### 标准请求格式
+#### 使用 Basic Auth 调用服务端
 
 ```bash
-# 方式 1: 使用 curl -u
-curl -u admin:admin123 http://your-server/api/endpoint
-
-# 方式 2: 直接设置 Header
-curl http://your-server/api/endpoint \
-  -H "Authorization: Basic YWRtaW46YWRtaW4xMjM="
+curl -X POST "http://localhost:8081/api/client/call?username=admin&password=admin123"
 ```
 
-## 项目依赖
+## 核心代码说明
 
-```xml
-<dependency>
-    <groupId>cn.structured</groupId>
-    <artifactId>structure-security-basicauth-client</artifactId>
-</dependency>
+### BasicAuthClientService 使用 RestTemplate 发送带 Basic Auth 的请求：
+
+```java
+String authHeader = BasicAuthGenerator.generate(username, password);
+
+HttpHeaders headers = new HttpHeaders();
+headers.set(HttpHeaders.AUTHORIZATION, authHeader);
+
+ResponseEntity<Map> response = restTemplate.exchange(
+    targetUrl,
+    HttpMethod.GET,
+    new HttpEntity<>(headers),
+    Map.class
+);
+```
+
+## 直接 curl 命令
+
+你也可以直接用 curl 测试服务端：
+
+```bash
+# 使用 -u 参数
+curl -u admin:admin123 http://localhost:8082/api/protected/hello
+
+# 使用 -H 参数直接设置 Authorization 头
+curl http://localhost:8082/api/protected/hello -H "Authorization: Basic YWRtaW46YWRtaW4xMjM="
 ```
 
 ## License

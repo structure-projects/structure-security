@@ -38,16 +38,16 @@ structure:
 #### 方式一：使用 BasicAuthGenerator（静态方法）
 
 ```java
-import cn.structured.security.basicauth.client.BasicAuthGenerator;
+import util.cn.structured.security.common.BasicAuthGenerator;
 
 // 生成认证头
 String authHeader = BasicAuthGenerator.generate("admin", "secret");
 // 结果: Basic YWRtaW46c2VjcmV0
 
-// 解析认证头
-String[] credentials = BasicAuthGenerator.parse("Basic YWRtaW46c2VjcmV0");
-String username = credentials[0]; // admin
-String password = credentials[1]; // secret
+        // 解析认证头
+        String[] credentials = BasicAuthGenerator.parse("Basic YWRtaW46c2VjcmV0");
+        String username = credentials[0]; // admin
+        String password = credentials[1]; // secret
 ```
 
 #### 方式二：使用 BasicAuthService（Spring Bean）

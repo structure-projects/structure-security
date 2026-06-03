@@ -1,6 +1,6 @@
 package cn.structured.security.basicauth.server.sample.controller;
 
-import cn.structured.security.basicauth.client.BasicAuthGenerator;
+import cn.structured.security.util.BasicAuthGenerator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 

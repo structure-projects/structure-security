@@ -84,7 +84,7 @@
         <module>../structure-security-jwt-starter</module>
         <module>../structure-security-basicauth-client</module>
         <module>../structure-security-basicauth-server</module>
-        <module>../structure-security-oauth-api</module>
+        <module>../structure-security-common</module>
         <module>../structure-security-oauth-sdk</module>
         <module>../structure-security-oauth-common</module>
         <module>../structure-security-oauth-resource-starter</module>
@@ -96,6 +96,11 @@
                 <groupId>cn.structured</groupId>
                 <artifactId>structure-common</artifactId>
                 <version>${structure.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.structured</groupId>
+                <artifactId>structure-security-common</artifactId>
+                <version>${revision}</version>
             </dependency>
             <dependency>
                 <groupId>cn.structured</groupId>
@@ -122,12 +127,7 @@
                 <artifactId>structure-security-basicauth-server</artifactId>
                 <version>${revision}</version>
             </dependency>
-            <dependency>
-                <groupId>cn.structured</groupId>
-                <artifactId>structure-security-permission-sample</artifactId>
-                <version>${revision}</version>
-                <scope>test</scope>
-            </dependency>
+
             <dependency>
                 <groupId>io.jsonwebtoken</groupId>
                 <artifactId>jjwt</artifactId>

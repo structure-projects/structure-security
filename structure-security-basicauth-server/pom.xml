@@ -75,8 +75,7 @@
         </dependency>
         <dependency>
             <groupId>cn.structured</groupId>
-            <artifactId>structure-security-basicauth-client</artifactId>
-            <version>${revision}</version>
+            <artifactId>structure-security-common</artifactId>
         </dependency>
     </dependencies>
 

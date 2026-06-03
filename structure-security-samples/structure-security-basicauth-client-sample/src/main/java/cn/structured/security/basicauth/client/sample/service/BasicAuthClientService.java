@@ -1,91 +1,89 @@
 package cn.structured.security.basicauth.client.sample.service;
 
 import cn.structured.security.basicauth.client.BasicAuthGenerator;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.reactive.function.client.WebClientResponseException;
-import reactor.core.publisher.Mono;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * Basic Auth 客户端服务
- * 演示如何使用 WebClient 发送带 Basic Auth 的请求
+ * 演示作为 client 如何调用需要 Basic Auth 的 server
  *
  * @author chuck
  */
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class BasicAuthClientService {
 
+    private final RestTemplate restTemplate;
+
     /**
-     * 使用 WebClient 发送带 Basic Auth 的请求（标准方式）
+     * 使用 Basic Auth 调用服务端
      */
-    public Mono<Map<String, Object>> sendBasicAuthRequest(
-            String baseUrl,
-            String username,
-            String password,
-            String endpoint) {
+    public Map<String, Object> callWithBasicAuth(String username, String password, String targetUrl) {
+        log.info("Calling server with Basic Auth: {}", targetUrl);
         
-        // 标准方式1: 直接使用 WebClient 的 defaultHeaders
-        String authHeader = BasicAuthGenerator.generate(username, password);
+        Map<String, Object> result = new HashMap<>();
         
-        return WebClient.create(baseUrl)
-                .get()
-                .uri(endpoint)
-                .header(HttpHeaders.AUTHORIZATION, authHeader)
-                .header(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
-                .retrieve()
-                .bodyToMono(Map.class)
-                .map(response -> {
-                    Map<String, Object> result = new HashMap<>();
-                    result.put("success", true);
-                    result.put("response", response);
-                    result.put("used_auth_header", authHeader);
-                    return result;
-                })
-                .onErrorResume(WebClientResponseException.class, e -> {
-                    log.error("Request failed: {}", e.getMessage());
-                    Map<String, Object> errorResult = new HashMap<>();
-                    errorResult.put("success", false);
-                    errorResult.put("status", e.getStatusCode().value());
-                    errorResult.put("error", e.getMessage());
-                    return Mono.just(errorResult);
-                });
+        try {
+            // 生成 Basic Auth 头
+            String authHeader = BasicAuthGenerator.generate(username, password);
+            
+            // 设置请求头
+            HttpHeaders headers = new HttpHeaders();
+            headers.set(HttpHeaders.AUTHORIZATION, authHeader);
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            
+            HttpEntity<String> requestEntity = new HttpEntity<>(headers);
+            
+            // 发送请求
+            ResponseEntity<Map> response = restTemplate.exchange(
+                targetUrl,
+                HttpMethod.GET,
+                requestEntity,
+                Map.class
+            );
+            
+            result.put("success", true);
+            result.put("status_code", response.getStatusCode().value());
+            result.put("response_body", response.getBody());
+            result.put("authorization_header_used", authHeader);
+            
+            log.info("Request successful, status code: {}", response.getStatusCode());
+            
+        } catch (Exception e) {
+            log.error("Request failed: {}", e.getMessage(), e);
+            result.put("success", false);
+            result.put("error", e.getMessage());
+        }
+        
+        return result;
     }
 
     /**
-     * 另一种方式: 使用 WebClient 的基础认证方法
+     * 演示多种调用方式
      */
-    public Mono<Map<String, Object>> sendBasicAuthRequestWithBuilder(
-            String baseUrl,
-            String username,
-            String password,
-            String endpoint) {
+    public Map<String, Object> demoAllCalls() {
+        Map<String, Object> demo = new HashMap<>();
         
-        // 标准方式2: 使用 WebClient.Builder 的默认认证
-        WebClient webClient = WebClient.builder()
-                .baseUrl(baseUrl)
-                .defaultHeaders(headers -> {
-                    headers.setBasicAuth(username, password);
-                })
-                .build();
+        demo.put("description", "Basic Auth Client 演示：作为客户端如何调用服务端");
         
-        return webClient
-                .get()
-                .uri(endpoint)
-                .retrieve()
-                .bodyToMono(Map.class)
-                .map(response -> {
-                    Map<String, Object> result = new HashMap<>();
-                    result.put("success", true);
-                    result.put("response", response);
-                    result.put("method", "Using WebClient basicAuth()");
-                    return result;
-                });
+        // 使用示例
+        Map<String, String> examples = new HashMap<>();
+        examples.put("target_url", "http://localhost:8082/api/protected/hello");
+        examples.put("username", "admin");
+        examples.put("password", "admin123");
+        examples.put("curl_command", "curl -u admin:admin123 http://localhost:8082/api/protected/hello");
+        examples.put("curl_with_header", "curl http://localhost:8082/api/protected/hello -H \"Authorization: Basic YWRtaW46YWRtaW4xMjM=\"");
+        
+        demo.put("examples", examples);
+        
+        return demo;
     }
 }

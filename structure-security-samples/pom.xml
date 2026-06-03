@@ -73,7 +73,7 @@
             </dependency>
             <dependency>
                 <groupId>cn.structured</groupId>
-                <artifactId>structure-security-oauth-api</artifactId>
+                <artifactId>structure-security-common</artifactId>
                 <version>${structure-security.version}</version>
             </dependency>
             <dependency>

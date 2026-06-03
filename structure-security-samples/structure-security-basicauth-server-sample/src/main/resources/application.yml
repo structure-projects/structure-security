@@ -9,26 +9,14 @@ spring:
 
 structure:
   security:
+    # 禁用 JWT Starter 的 Security 自动配置，避免冲突
+    enabled: false
     basicauth:
       server:
-        enabled: true
-        realm: "Basic Auth Demo"
-        users:
-          admin: admin123
-          user: user123
-    enabled: true
-    default-login-url: /api/user/login
-    cors-filter-class: cn.structure.starter.jwt.configuration.CorsFilter
-    ant-matchers:
-      un-authenticated:
-        - /api/user/login
-        - /api/user/register
-        - /api/public/**
-        - /error
-
+        enabled: false
   jwt:
     secret: a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6
-    jwt-token-validity: 32400
+    jwtTokenValidity: 32400
 
 logging:
   level:
