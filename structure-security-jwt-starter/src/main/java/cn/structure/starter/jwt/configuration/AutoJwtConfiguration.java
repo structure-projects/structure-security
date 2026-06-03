@@ -8,6 +8,7 @@ import cn.structure.starter.jwt.properties.JwtConfig;
 import cn.structure.starter.jwt.properties.SecurityConfig;
 import cn.structure.starter.jwt.service.DefaultUserServiceImpl;
 import cn.structure.starter.jwt.service.InnerTokenStore;
+import cn.structure.starter.jwt.service.JwtDefaultServiceImpl;
 import cn.structured.security.configuration.StructureAccessDeniedHandler;
 import cn.structured.security.configuration.StructureAuthenticationEntryPoint;
 import jakarta.annotation.Resource;
@@ -16,6 +17,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -36,7 +38,8 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 @EnableConfigurationProperties({JwtConfig.class, SecurityConfig.class})
 @ComponentScan(value = {"cn.structure.starter.jwt.configuration",
         "cn.structure.starter.jwt.filter"})
-public class AutoConfiguration {
+
+public class AutoJwtConfiguration {
 
     @Resource
     private JwtConfig jwtConfig;

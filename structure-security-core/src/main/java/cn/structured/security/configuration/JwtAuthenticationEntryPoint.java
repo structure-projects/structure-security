@@ -1,4 +1,4 @@
-package cn.structure.starter.jwt.configuration;
+package cn.structured.security.configuration;
 
 import cn.structure.common.entity.IResult;
 import cn.structure.common.utils.IResultUtil;

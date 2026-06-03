@@ -43,7 +43,7 @@ public class SecurityConfig {
     /**
      * CORS 跨域过滤器类
      */
-    private String corsFilterClass = "cn.structure.starter.jwt.configuration.CorsFilter";
+    private String corsFilterClass = "cn.structured.security.filter.CorsFilter";
 
     /**
      * 访问权限配置

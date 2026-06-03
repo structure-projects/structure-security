@@ -1,4 +1,4 @@
-package cn.structure.starter.jwt.configuration;
+package cn.structure.starter.jwt.service;
 
 import cn.structure.starter.jwt.interfaces.ITokenService;
 import cn.structure.starter.jwt.properties.JwtConfig;

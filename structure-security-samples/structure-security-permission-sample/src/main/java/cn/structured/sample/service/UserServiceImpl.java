@@ -1,6 +1,5 @@
 package cn.structured.sample.service;
 
-import cn.structure.starter.jwt.interfaces.ITokenService;
 import cn.structured.security.entity.StructureAuthUser;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

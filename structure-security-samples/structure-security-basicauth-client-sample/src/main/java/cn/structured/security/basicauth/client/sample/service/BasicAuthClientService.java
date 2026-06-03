@@ -1,6 +1,6 @@
 package cn.structured.security.basicauth.client.sample.service;
 
-import cn.structured.security.basicauth.client.BasicAuthGenerator;
+import cn.structured.security.common.util.BasicAuthGenerator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;

@@ -3,14 +3,15 @@ package cn.structure.starter.jwt.configuration;
 import cn.structure.common.constant.AuthConstant;
 import cn.structure.common.constant.SymbolConstant;
 import cn.structure.common.enums.NumberEnum;
-import cn.structure.starter.jwt.interfaces.ICorsFilter;
+import cn.structure.starter.jwt.filter.JwtRequestFilter;
+import cn.structured.security.interfaces.ICorsFilter;
 import cn.structure.starter.jwt.interfaces.ITokenService;
 import cn.structure.starter.jwt.interfaces.ITokenStore;
-import cn.structure.starter.jwt.properties.JwtConfig;
 import cn.structure.starter.jwt.properties.SecurityConfig;
 import jakarta.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -36,9 +37,9 @@ import java.util.Map;
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(prePostEnabled = true)
-public class WebSecurityConfig {
+public class JwtWebSecurityConfig {
 
-    private static final Logger logger = LoggerFactory.getLogger(WebSecurityConfig.class);
+    private static final Logger logger = LoggerFactory.getLogger(JwtWebSecurityConfig.class);
 
     @Resource
     private AuthenticationEntryPoint jwtAuthenticationEntryPoint;
@@ -56,6 +57,7 @@ public class WebSecurityConfig {
     private ITokenStore tokenStore;
 
     @Bean
+    @ConditionalOnMissingBean(AuthenticationManager.class)
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
         return authConfig.getAuthenticationManager();
     }

@@ -1,6 +1,6 @@
 package cn.structured.security.basicauth.client.sample;
 
-import cn.structured.security.basicauth.client.BasicAuthGenerator;
+import cn.structured.security.common.util.BasicAuthGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 

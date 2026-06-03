@@ -9,7 +9,7 @@ structure:
   security:
     enabled: true
     # CORS 跨域过滤器类
-    corsFilterClass: cn.structure.starter.jwt.configuration.CorsFilter
+    corsFilterClass: cn.structured.security.filter.CorsFilter
     antMatchers:
       unAuthenticated:
         # 【根据实际需求调整】不需要认证的接口

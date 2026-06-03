@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
  * Basic Auth 服务端示例应用
- * 使用 Spring Security 内置的 httpBasic() 认证
+ * 演示如何集成 Basic Auth Server 和 JWT
  *
  * @author chuck
  */

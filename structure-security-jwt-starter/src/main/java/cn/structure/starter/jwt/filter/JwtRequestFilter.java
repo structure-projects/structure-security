@@ -1,9 +1,8 @@
-package cn.structure.starter.jwt.configuration;
+package cn.structure.starter.jwt.filter;
 
 import cn.structure.common.constant.AuthConstant;
 import cn.structure.starter.jwt.interfaces.ITokenService;
 import cn.structure.starter.jwt.interfaces.ITokenStore;
-import cn.structure.starter.jwt.properties.JwtConfig;
 import cn.structure.starter.jwt.properties.SecurityConfig;
 import cn.structured.security.entity.StructureAuthUser;
 import jakarta.servlet.FilterChain;

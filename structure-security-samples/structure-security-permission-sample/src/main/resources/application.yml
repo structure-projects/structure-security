@@ -3,7 +3,7 @@ spring:
   main:
     allow-circular-references: true
 server:
-  port: 8080
+  port: 8086
 
 # JWT 配置
 structure:
@@ -20,7 +20,7 @@ structure:
     default-login-url: /api/user/login
     # CORS 跨域过滤器类
     # 一般不需要修改
-    corsFilterClass: cn.structure.starter.jwt.configuration.CorsFilter
+    corsFilterClass: cn.structured.security.filter.CorsFilter
     # Ant 风格路径匹配配置
     antMatchers:
       # 不需要认证的接口（白名单）

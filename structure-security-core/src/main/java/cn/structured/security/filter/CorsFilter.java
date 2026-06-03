@@ -1,6 +1,6 @@
-package cn.structure.starter.jwt.configuration;
+package cn.structured.security.filter;
 
-import cn.structure.starter.jwt.interfaces.ICorsFilter;
+import cn.structured.security.interfaces.ICorsFilter;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;

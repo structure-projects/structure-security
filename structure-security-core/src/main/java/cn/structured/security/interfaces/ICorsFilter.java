@@ -1,4 +1,4 @@
-package cn.structure.starter.jwt.interfaces;
+package cn.structured.security.interfaces;
 
 
 import jakarta.servlet.Filter;

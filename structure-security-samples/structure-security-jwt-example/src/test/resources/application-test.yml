@@ -8,7 +8,7 @@ structure:
   # Security 框架配置
   security:
     enabled: true
-    corsFilterClass: cn.structure.starter.jwt.configuration.CorsFilter
+    corsFilterClass: cn.structured.security.filter.CorsFilter
     antMatchers:
       unAuthenticated:
         # 测试环境的白名单接口
