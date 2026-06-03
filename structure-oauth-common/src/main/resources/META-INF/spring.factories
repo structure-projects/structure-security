@@ -1,3 +1,0 @@
-#Auto Configuration
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  cn.structure.starter.oauth.common.configuration.AutoSwaggerFix

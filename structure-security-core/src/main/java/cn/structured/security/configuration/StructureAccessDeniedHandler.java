@@ -9,20 +9,14 @@ import com.alibaba.fastjson.JSON;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
 
 import java.io.IOException;
 
-/**
- * <p>
- * chuck
- * 2019/11/28 11:36
- * </p>
- *
- * @author chuck
- */
+@Slf4j
 public class StructureAccessDeniedHandler implements AccessDeniedHandler {
 
     @Resource
@@ -30,11 +24,14 @@ public class StructureAccessDeniedHandler implements AccessDeniedHandler {
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response,
-                       AccessDeniedException accessDeniedException) throws IOException {
+                       AccessDeniedException accessDeniedException) {
         response.setStatus(HttpStatus.OK.value());
         response.setHeader(Header.CONTENT_TYPE.toString(), ContentType.JSON.toString());
-        //无权限
-        IResult result = resultUtil.fail(ExceptionRsType.PERMISSION_DENIED.getCode(), accessDeniedException.getMessage());
-        response.getWriter().write(JSON.toJSONString(result));
+        try {
+            IResult result = resultUtil.fail(ExceptionRsType.PERMISSION_DENIED.getCode(), accessDeniedException.getMessage());
+            response.getWriter().write(JSON.toJSONString(result));
+        } catch (IOException e) {
+            log.error("权限不足 -> {}",e.getMessage());
+        }
     }
 }
