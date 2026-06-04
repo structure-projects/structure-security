@@ -51,23 +51,53 @@ structure-security/
 </dependency>
 ```
 
-### 2. 配置application.yml
+### 2. 配置 application.yml
+
+项目提供了多环境配置文件，可以根据需要选择使用：
+
+**方式一：直接在 application.yml 中配置（简单场景）**
 
 ```yaml
 server:
   port: 8801
 structure:
-  jwt:
-    secret: your-secret-key-here  # JWT加密密钥
-    jwtTokenValidity: 32400       # token有效期(秒)，默认9小时
+  security:
+    enabled: true
     antMatchers:
-      unAuthenticated:           # 不需要认证的接口
+      unAuthenticated:
         - /api/user/login
         - /doc.html
         - /webjars/**
-        - /swagger-resources/**
-        - /v2/api-docs/**
+  jwt:
+    secret: your-secret-key-here  # JWT加密密钥
+    jwtTokenValidity: 32400       # token有效期(秒)，默认9小时
 ```
+
+**方式二：使用独立的安全配置文件（推荐）**
+
+项目提供了完整的安全配置文件，位于 `resources/security/` 目录：
+
+| 配置文件 | 说明 | 使用场景 |
+|---------|------|----------|
+| `security/application-security.yml` | 基础安全配置 | 开发/测试/生产基础模板 |
+| `security/application-prod.yml` | 生产环境配置 | 生产环境部署 |
+| `test/resources/application-test.yml` | 测试环境配置 | 单元测试/集成测试 |
+
+**配置示例**（以 application-dev.yml 为例）：
+
+```yaml
+spring:
+  config:
+    import: classpath:security/application-security.yml
+
+server:
+  port: 8801
+```
+
+详细配置说明请参考：
+- [基础安全配置](./structure-jwt-security-example/src/main/resources/security/application-security.yml)
+- [生产环境配置](./structure-jwt-security-example/src/main/resources/security/application-prod.yml)
+- [测试环境配置](./structure-jwt-security-example/src/test/resources/application-test.yml)
 
 ### 3. 实现用户服务
 
@@ -152,13 +182,50 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 
 ## 配置说明
 
-### JwtConfig 配置项
+### Security 框架配置项
 
-| 配置项 | 说明 | 默认值 |
-|--------|------|--------|
-| `structure.jwt.secret` | JWT加密密钥 | JWT |
-| `structure.jwt.jwtTokenValidity` | Token有效期(秒) | 32400(9小时) |
-| `structure.jwt.antMatchers.unAuthenticated` | 无需认证的接口列表 | - |
+| 配置项 | 说明 | 默认值 | 必填 |
+|--------|------|--------|------|
+| `structure.security.enabled` | 是否启用安全框架 | true | ❌ |
+| `structure.security.default-login-url` | 默认登录页面 | - | ❌ |
+| `structure.security.corsFilterClass` | CORS过滤器类 | 内置类 | ❌ |
+| `structure.security.antMatchers` | 路径权限配置 | - | ❌ |
+
+### JWT 认证配置项
+
+| 配置项 | 说明 | 默认值 | 必填 |
+|--------|------|--------|------|
+| `structure.jwt.secret` | JWT加密密钥，建议32位以上 | JWT | ✅ |
+| `structure.jwt.jwtTokenValidity` | Token有效期(秒) | 32400(9小时) | ❌ |
+
+### Ant 风格路径匹配说明
+
+| 符号 | 说明 | 示例 |
+|------|------|------|
+| `?` | 匹配单个字符 | `/api/user?` 匹配 `/api/user1`, `/api/userA` |
+| `*` | 匹配零个或多个路径段 | `/api/*` 匹配 `/api/user`, `/api/user/123` |
+| `**` | 匹配零个或多个路径段（包含子目录） | `/**/login` 匹配 `/login`, `/api/login`, `/api/v1/login` |
+
+路径权限配置在 `structure.security.antMatchers` 下：
+
+| 配置项 | 说明 |
+|--------|------|
+| `unAuthenticated` | 不需要认证即可访问的路径列表 |
+
+### 多环境配置
+
+项目支持多环境配置，通过 `spring.profiles.active` 指定环境：
+
+```bash
+# 开发环境
+java -jar app.jar --spring.profiles.active=dev
+
+# 测试环境
+java -jar app.jar --spring.profiles.active=test
+
+# 生产环境
+java -jar app.jar --spring.profiles.active=prod
+```
 
 ### 核心接口
 

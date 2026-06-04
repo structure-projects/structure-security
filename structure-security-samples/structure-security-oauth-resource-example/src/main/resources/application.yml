@@ -1,0 +1,29 @@
+server:
+  port: 8085
+spring:
+  data:
+    redis:
+      database: 1
+      password: 123456
+      host: 172.16.0.249
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+structure:
+  oauth:
+    resource:
+      resource-id: user
+      antMatchers:
+        unAuthenticated:
+          # 不经过身份验证的接口
+#          - /**
+          - /doc.html
+          - /webjars/**
+          - /swagger-resources/**
+          - /v2/api-docs/**
+          - /web-api/auth-code/**
+          - /open-api/**
+swagger:
+  title: 用户中心API
+  description: structure-user
+  version: v1.0.1

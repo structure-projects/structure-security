@@ -1,0 +1,129 @@
+# ============================================
+# JWT Security 配置文件
+# ============================================
+# 本配置文件包含 JWT 安全认证的完整配置示例
+# 以及 Security 框架的通用配置
+# ============================================
+
+structure:
+  # Security 框架通用配置
+  security:
+    # 是否启用安全框架
+    enabled: true
+    # 默认登录页面（API 模式可为空）
+    default-login-url: /api/user/login
+    # CORS 跨域过滤器类
+    # 一般不需要修改
+    corsFilterClass: cn.structured.security.filter.CorsFilter
+    # Ant 风格路径匹配配置
+    antMatchers:
+      # 不需要认证的接口（白名单）
+      # 这些接口不需要登录即可访问
+      unAuthenticated:
+        # 登录接口
+        - /api/user/login
+        - /api/user/register
+        # API 文档相关
+        - /doc.html
+        - /webjars/**
+        - /swagger-resources/**
+        - /v2/api-docs/**
+        - /swagger-ui/**
+        - /swagger-ui.html
+        # Actuator 健康检查
+        - /actuator/health
+        - /actuator/info
+        # 静态资源
+        - /static/**
+        - /favicon.ico
+        # 错误页面
+        - /error
+
+      # 需要特定权限的接口示例（可扩展）
+      # roleBased:
+      #   - /api/admin/**
+      # permissionBased:
+      #   - /api/user/manage/**
+
+  # JWT 认证配置
+  jwt:
+    # JWT 加密密钥（必填）
+    # 推荐使用至少 32 位以上的随机字符串
+    # 生产环境请务必修改为安全的密钥
+    secret: a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6
+
+    # Token 有效期（秒）
+    # 默认: 32400 秒（9小时）
+    # 可选值:
+    #   - 1小时: 3600
+    #   - 9小时: 32400
+    #   - 1天: 86400
+    #   - 7天: 604800
+    jwtTokenValidity: 32400
+
+# ============================================
+# Spring Security 详细配置说明
+# ============================================
+#
+# 1. structure.security（Security 框架配置）
+#    - enabled: 是否启用安全框架
+#    - default-login-url: 默认登录页面
+#    - corsFilterClass: CORS 过滤器类
+#    - antMatchers: 路径权限配置
+#
+# 2. structure.jwt.secret（密钥）
+#    - 用于 JWT Token 的签名和验证
+#    - 建议使用 UUID 或随机字符串生成器创建
+#    - 长度至少 32 字符
+#    - 生产环境请通过环境变量或密钥管理服务注入
+#
+# 3. structure.jwt.jwtTokenValidity（有效期）
+#    - Token 过期时间，单位：秒
+#    - 需要考虑业务场景和安全性的平衡
+#    - 较长时间可提升用户体验，较短时间可提高安全性
+#
+# 4. structure.security.antMatchers（路径权限配置）
+#    - unAuthenticated: 不需要认证即可访问的路径
+#    - 使用 Ant 风格路径匹配：
+#      * ?   匹配单个字符
+#      * *   匹配零个或多个路径段
+#      * **  匹配零个或多个路径段（包含子目录）
+#    - 建议至少包含：登录接口、公开文档、错误页面
+#
+# ============================================
+
+# ============================================
+# 常见配置场景
+# ============================================
+
+# 场景1: 仅 API 模式（无前端页面）
+# structure:
+#   jwt:
+#     antMatchers:
+#       unAuthenticated:
+#         - /api/public/**
+#         - /api/user/login
+
+# 场景2: 包含管理后台
+# structure:
+#   security:
+#     default-login-url: /admin/login
+#   jwt:
+#     antMatchers:
+#       unAuthenticated:
+#         - /api/user/login
+#         - /admin/login
+#       roleBased:
+#         - /api/admin/**
+
+# 场景3: 前后分离 API
+# structure:
+#   jwt:
+#     antMatchers:
+#       unAuthenticated:
+#         - /api/v1/auth/**
+#         - /api/v1/public/**
+#         - /swagger-ui/**
+#         - /v3/api-docs/**
+
+# ============================================

@@ -1,0 +1,31 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: basicauth-server-sample
+  profiles:
+    active: dev
+  main:
+    allow-circular-references: true
+
+structure:
+  security:
+    basicauth:
+      server:
+        enabled: true
+        realm: "Basic Auth Demo"
+        use-user-service: true
+        users:
+          admin: admin123
+          user: user123
+        permissions:
+          admin:
+            - /api/protected/**
+          user:
+            - /api/protected/hello
+            - /api/protected/user-info
+
+logging:
+  level:
+    cn.structured: DEBUG

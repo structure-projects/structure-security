@@ -49,10 +49,9 @@
 
 
     <properties>
-        <revision>1.1.0-SNAPSHOT</revision>
-        <structure.version>1.3.6</structure.version>
+        <revision>1.1.1-SNAPSHOT</revision>
+        <structure.version>1.4.0</structure.version>
         <spring-boot.version>4.0.6</spring-boot.version>
-        <spring-security.version>6.2.3</spring-security.version>
         <jjwt.version>0.12.7</jjwt.version>
         <jakarta.servlet.version>6.0.0</jakarta.servlet.version>
         <jakarta.annotation.version>2.1.1</jakarta.annotation.version>
@@ -81,7 +80,13 @@
 
     <modules>
         <module>../structure-security-core</module>
-        <module>../structure-jwt-security-starter</module>
+        <module>../structure-security-permission-starter</module>
+        <module>../structure-security-jwt-starter</module>
+        <module>../structure-security-basicauth-starter</module>
+        <module>../structure-security-common</module>
+        <module>../structure-security-oauth-sdk</module>
+        <module>../structure-security-oauth-common</module>
+        <module>../structure-security-oauth-resource-starter</module>
     </modules>
 
     <dependencyManagement>
@@ -93,14 +98,35 @@
             </dependency>
             <dependency>
                 <groupId>cn.structured</groupId>
+                <artifactId>structure-security-common</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.structured</groupId>
                 <artifactId>structure-security-core</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
                 <groupId>cn.structured</groupId>
-                <artifactId>structure-jwt-security-starter</artifactId>
+                <artifactId>structure-security-permission-starter</artifactId>
                 <version>${revision}</version>
             </dependency>
+            <dependency>
+                <groupId>cn.structured</groupId>
+                <artifactId>structure-security-jwt-starter</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.structured</groupId>
+                <artifactId>structure-security-basicauth-client</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.structured</groupId>
+                <artifactId>structure-security-basicauth-sterter</artifactId>
+                <version>${revision}</version>
+            </dependency>
+
             <dependency>
                 <groupId>io.jsonwebtoken</groupId>
                 <artifactId>jjwt</artifactId>
@@ -125,16 +151,14 @@
                 <scope>provided</scope>
             </dependency>
             <dependency>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-starter-webmvc-api</artifactId>
+                <version>2.3.0</version>
+            </dependency>
+            <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
                 <version>${spring-boot.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.security</groupId>
-                <artifactId>spring-security-bom</artifactId>
-                <version>${spring-security.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
