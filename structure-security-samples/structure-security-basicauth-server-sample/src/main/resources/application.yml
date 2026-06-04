@@ -15,9 +15,16 @@ structure:
       server:
         enabled: true
         realm: "Basic Auth Demo"
+        use-user-service: true
         users:
           admin: admin123
           user: user123
+        permissions:
+          admin:
+            - /api/protected/**
+          user:
+            - /api/protected/hello
+            - /api/protected/user-info
 
 logging:
   level:

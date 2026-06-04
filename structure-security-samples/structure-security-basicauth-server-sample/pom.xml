@@ -23,7 +23,7 @@
 
         <dependency>
             <groupId>cn.structured</groupId>
-            <artifactId>structure-security-basicauth-server</artifactId>
+            <artifactId>structure-security-basicauth-starter</artifactId>
         </dependency>
 
         <dependency>

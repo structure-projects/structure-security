@@ -48,8 +48,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         if ("admin".equals(username)) {
             authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
             authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
-        } else {
+        } else if ("user".equals(username)) {
             authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+        } else {
+            authorities.add(new SimpleGrantedAuthority("ROLE_GUEST"));
         }
         authUser.setAuthorities(authorities);
 

@@ -23,7 +23,6 @@
         <module>./structure-security-jwt-example</module>
         <module>./structure-security-permission-sample</module>
         <module>./structure-security-oauth-resource-example</module>
-        <module>./structure-security-basicauth-client-sample</module>
         <module>./structure-security-basicauth-server-sample</module>
     </modules>
 
@@ -62,12 +61,7 @@
             </dependency>
             <dependency>
                 <groupId>cn.structured</groupId>
-                <artifactId>structure-security-basicauth-client</artifactId>
-                <version>${structure-security.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>cn.structured</groupId>
-                <artifactId>structure-security-basicauth-server</artifactId>
+                <artifactId>structure-security-basicauth-starter</artifactId>
                 <version>${structure-security.version}</version>
             </dependency>
             <dependency>

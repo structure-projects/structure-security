@@ -18,7 +18,7 @@ import org.springframework.context.annotation.Configuration;
  * @since JDK1.8
  */
 @Configuration
-@ComponentScan(basePackages = "cn.structured.oauth.sdk.**")
+@ComponentScan(basePackages = "cn.structured.security.oauth.sdk.**")
 @EnableConfigurationProperties({AuthClientConfig.class})
 public class AutoClientConfiguration {
 
