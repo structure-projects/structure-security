@@ -12,10 +12,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <name>structure-security-common</name>
-    <description>oauth 接口</description>
+    <description>security 公共模块封装</description>
     <artifactId>structure-security-common</artifactId>
     <packaging>jar</packaging>
-
 
     <url>https://projects.structured.cn/structure-oauth</url>
     <inceptionYear>2021</inceptionYear>
@@ -43,13 +42,13 @@
 
     <issueManagement>
         <system>Github</system>
-        <url>https://github.com/structure-projects/structure-oauth/issues</url>
+        <url>https://github.com/structure-projects/structure-security/issues</url>
     </issueManagement>
 
     <scm>
-        <url>https://github.com/structure-projects/structure-oauth</url>
-        <connection>scm:git:git://github.com/structure-projects/structure-oauth.git</connection>
-        <developerConnection>scm:git:ssh://git@github.com:structure-projects/structure-oauth.git</developerConnection>
+        <url>https://github.com/structure-projects/structure-security</url>
+        <connection>scm:git:git://github.com/structure-projects/structure-security.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com:structure-projects/structure-security.git</developerConnection>
     </scm>
 
     <dependencies>

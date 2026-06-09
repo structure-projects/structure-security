@@ -45,13 +45,13 @@
 
     <issueManagement>
         <system>Github</system>
-        <url>https://github.com/structure-projects/structure-oauth/issues</url>
+        <url>https://github.com/structure-projects/structure-security/issues</url>
     </issueManagement>
 
     <scm>
-        <url>https://github.com/structure-projects/structure-oauth</url>
-        <connection>scm:git:git://github.com/structure-projects/structure-oauth.git</connection>
-        <developerConnection>scm:git:ssh://git@github.com:structure-projects/structure-oauth.git</developerConnection>
+        <url>https://github.com/structure-projects/structure-security</url>
+        <connection>scm:git:git://github.com/structure-projects/structure-security.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com:structure-projects/structure-security.git</developerConnection>
     </scm>
 
     <dependencies>

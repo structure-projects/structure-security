@@ -13,7 +13,7 @@
     <packaging>jar</packaging>
     <artifactId>structure-security-core</artifactId>
     <name>structure-security-core</name>
-    <description>structure-jwt-security</description>
+    <description>structure-security-core</description>
 
     <url>https://projects.structured.cn/structure-security</url>
     <inceptionYear>2021</inceptionYear>
