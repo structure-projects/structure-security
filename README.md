@@ -1,17 +1,26 @@
-# structure-security
+# Structure Security
 
-一款基于 Spring Security 的 JWT 安全认证starter，简化 Spring Boot 项目的 JWT 安全认证开发。
+一套基于 Spring Security 的企业级安全认证与授权框架，提供完整的 JWT 认证、权限管理、OAuth2 支持和 Basic Auth 等功能模块。
+
+## 特性
+
+- **🔐 多种认证方式**：支持 JWT、Basic Auth、OAuth2 等多种认证方式
+- **🛡️ 权限管理**：提供基于通配符的多层级权限模型，支持多种权限获取方式
+- **🚀 开箱即用**：提供 Spring Boot Starter 自动配置，快速集成
+- **⚡ 高性能**：支持本地缓存、分布式权限获取等优化方案
+- **🔧 灵活扩展**：丰富的扩展点和接口，支持自定义实现
 
 ## 技术栈
 
 | 技术 | 说明 | 版本 |
 |------|------|------|
-| Spring Boot | Web框架 | 4.0.6 |
-| Spring Security | 安全框架 | 6.2.3 |
-| JJWT | JWT库 | 0.12.7 |
+| Spring Boot | Web 框架 | 4.0.6 |
+| Spring Security | 安全框架 | 由 Spring Boot 管理 |
+| JJWT | JWT 库 | 0.12.7 |
 | Java | 开发语言 | 17 (LTS) |
 | Maven | 项目构建 | 3.9+ |
-| Jakarta EE | Servlet API | 6.0 |
+| Jakarta EE | Servlet API | 6.0.0 |
+| structure-common | 基础组件 | 1.4.0 |
 
 ## 环境要求
 
@@ -32,34 +41,90 @@
 
 ## 模块说明
 
+### 核心模块
+
 ```
 structure-security/
 ├── structure-security-dependencies/     # 依赖管理模块
-├── structure-security-core/             # 核心模块，提供安全基础组件
-└── structure-jwt-security-starter/      # JWT安全认证starter
+├── structure-security-common/           # 公共模块（业务对象、接口定义）
+├── structure-security-core/             # 核心模块（安全基础组件）
 ```
 
-## 快速启用
+### Starter 模块
 
-### 1. 添加Maven依赖
+| 模块 | 说明 |
+|------|------|
+| structure-security-jwt-starter | JWT 认证 Starter |
+| structure-security-permission-starter | 权限管理 Starter |
+| structure-security-basicauth-starter | Basic Auth Starter |
+| structure-security-oauth-sdk | OAuth2 SDK |
+| structure-security-oauth-common | OAuth2 公共模块 |
+| structure-security-oauth-resource-starter | OAuth2 资源服务器 Starter |
+
+### 示例模块
+
+```
+structure-security-samples/
+├── structure-security-jwt-example/              # JWT 认证示例
+├── structure-security-permission-sample/        # 权限系统示例
+├── structure-security-basicauth-server-sample/  # Basic Auth 服务端示例
+├── structure-security-oauth-resource-example/   # OAuth2 资源服务器示例
+```
+
+## 快速开始
+
+### 添加依赖
+
+首先添加依赖管理模块：
+
+```xml
+<dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>cn.structured</groupId>
+            <artifactId>structure-security-dependencies</artifactId>
+            <version>1.1.1-SNAPSHOT</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+    </dependencies>
+</dependencyManagement>
+```
+
+然后根据需要选择 Starter 依赖：
+
+#### JWT 认证
 
 ```xml
 <dependency>
     <groupId>cn.structured</groupId>
-    <artifactId>structure-jwt-security-starter</artifactId>
-    <version>1.1.0</version>
+    <artifactId>structure-security-jwt-starter</artifactId>
 </dependency>
 ```
 
-### 2. 配置 application.yml
+#### 权限管理
 
-项目提供了多环境配置文件，可以根据需要选择使用：
+```xml
+<dependency>
+    <groupId>cn.structured</groupId>
+    <artifactId>structure-security-permission-starter</artifactId>
+</dependency>
+```
 
-**方式一：直接在 application.yml 中配置（简单场景）**
+#### Basic Auth
+
+```xml
+<dependency>
+    <groupId>cn.structured</groupId>
+    <artifactId>structure-security-basicauth-starter</artifactId>
+</dependency>
+```
+
+### 配置应用
+
+#### JWT 认证配置
 
 ```yaml
-server:
-  port: 8801
 structure:
   security:
     enabled: true
@@ -69,39 +134,21 @@ structure:
         - /doc.html
         - /webjars/**
   jwt:
-    secret: your-secret-key-here  # JWT加密密钥
-    jwtTokenValidity: 32400       # token有效期(秒)，默认9小时
+    secret: your-secret-key-at-least-256-bits-long  # JWT 加密密钥
+    jwtTokenValidity: 32400                           # Token 有效期（秒），默认 9 小时
 ```
 
-**方式二：使用独立的安全配置文件（推荐）**
-
-项目提供了完整的安全配置文件，位于 `resources/security/` 目录：
-
-| 配置文件 | 说明 | 使用场景 |
-|---------|------|----------|
-| `security/application-security.yml` | 基础安全配置 | 开发/测试/生产基础模板 |
-| `security/application-prod.yml` | 生产环境配置 | 生产环境部署 |
-| `test/resources/application-test.yml` | 测试环境配置 | 单元测试/集成测试 |
-
-**配置示例**（以 application-dev.yml 为例）：
+#### 权限管理配置
 
 ```yaml
-spring:
-  config:
-    import: classpath:security/application-security.yml
-
-server:
-  port: 8801
+structure:
+  security:
+    permission:
+      enabled: true
+      provider-type: context  # context 或 remote
 ```
 
-详细配置说明请参考：
-- [基础安全配置](./structure-jwt-security-example/src/main/resources/security/application-security.yml)
-- [生产环境配置](./structure-jwt-security-example/src/main/resources/security/application-prod.yml)
-- [测试环境配置](./structure-jwt-security-example/src/test/resources/application-test.yml)
-
-### 3. 实现用户服务
-
-实现 `UserDetailsService` 接口或在配置类中注入自定义实现：
+### 实现用户服务
 
 ```java
 @Service
@@ -112,7 +159,6 @@ public class UserServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        // 查询用户逻辑，返回 StructureAuthUser
         StructureAuthUser user = new StructureAuthUser();
         user.setId(1L);
         user.setUsername(username);
@@ -121,28 +167,18 @@ public class UserServiceImpl implements UserDetailsService {
         user.setUnlocked(true);
         user.setUnexpired(true);
         
-        // 必须设置 authorities，否则会出现空指针异常
-        List<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
+        List&lt;GrantedAuthority&gt; authorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
         user.setAuthorities(authorities);
         return user;
     }
 }
 ```
 
-### 4. 启动类配置
-
-```java
-@SpringBootApplication
-public class JwtExampleApplication {
-    public static void main(String[] args) {
-        SpringApplication.run(JwtExampleApplication.class, args);
-    }
-}
-```
-
 ## 快速使用
 
-### 登录获取Token
+### JWT 认证
+
+#### 登录获取 Token
 
 ```bash
 POST /api/user/login
@@ -164,128 +200,151 @@ Content-Type: application/json
 }
 ```
 
-### 访问受保护资源
-
-在请求头中添加Token：
+#### 访问受保护资源
 
 ```bash
 GET /api/protected/resource
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 ```
 
-### 登出
+### 权限检查
 
-```bash
-POST /api/user/logout
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+使用注解方式：
+
+```java
+@PreAuthorize("@permissionService.hasPermission('order:create')")
+public void createOrder() {
+    // 需要 order:create 权限
+}
+```
+
+使用编程方式：
+
+```java
+@Autowired
+private IPermissionService permissionService;
+
+public void createOrder() {
+    if (permissionService.hasPermission("order:create")) {
+        // 有权限，执行操作
+    }
+}
 ```
 
 ## 配置说明
 
-### Security 框架配置项
+### Security 配置项
 
 | 配置项 | 说明 | 默认值 | 必填 |
 |--------|------|--------|------|
 | `structure.security.enabled` | 是否启用安全框架 | true | ❌ |
 | `structure.security.default-login-url` | 默认登录页面 | - | ❌ |
-| `structure.security.corsFilterClass` | CORS过滤器类 | 内置类 | ❌ |
+| `structure.security.corsFilterClass` | CORS 过滤器类 | 内置类 | ❌ |
 | `structure.security.antMatchers` | 路径权限配置 | - | ❌ |
 
-### JWT 认证配置项
+### JWT 配置项
 
 | 配置项 | 说明 | 默认值 | 必填 |
 |--------|------|--------|------|
-| `structure.jwt.secret` | JWT加密密钥，建议32位以上 | JWT | ✅ |
-| `structure.jwt.jwtTokenValidity` | Token有效期(秒) | 32400(9小时) | ❌ |
+| `structure.jwt.secret` | JWT 加密密钥 | - | ✅ |
+| `structure.jwt.jwtTokenValidity` | Token 有效期（秒） | 32400 (9小时) | ❌ |
 
-### Ant 风格路径匹配说明
+### 权限配置项
 
-| 符号 | 说明 | 示例 |
-|------|------|------|
-| `?` | 匹配单个字符 | `/api/user?` 匹配 `/api/user1`, `/api/userA` |
-| `*` | 匹配零个或多个路径段 | `/api/*` 匹配 `/api/user`, `/api/user/123` |
-| `**` | 匹配零个或多个路径段（包含子目录） | `/**/login` 匹配 `/login`, `/api/login`, `/api/v1/login` |
+| 配置项 | 说明 | 默认值 | 必填 |
+|--------|------|--------|------|
+| `structure.security.permission.enabled` | 是否启用权限模块 | true | ❌ |
+| `structure.security.permission.provider-type` | 权限提供者类型 | context | ❌ |
+| `structure.security.permission.remote-url` | 远程权限接口 URL | - | ❌ |
 
-路径权限配置在 `structure.security.antMatchers` 下：
+## 模块详细文档
 
-| 配置项 | 说明 |
-|--------|------|
-| `unAuthenticated` | 不需要认证即可访问的路径列表 |
+### 核心模块
+- [structure-security-common](./structure-security-common/README.md) - 公共模块文档
+- [structure-security-core](./structure-security-core/README.md) - 核心模块文档
 
-### 多环境配置
+### Starter 模块
+- [structure-security-jwt-starter](./structure-security-jwt-starter/README.md) - JWT 认证 Starter 文档
+- [structure-security-permission-starter](./structure-security-permission-starter/README.md) - 权限管理 Starter 文档
+- [structure-security-basicauth-starter](./structure-security-basicauth-starter/README.md) - Basic Auth Starter 文档
+- [structure-security-oauth-common](./structure-security-oauth-common/README.md) - OAuth2 公共模块文档
+- [structure-security-oauth-sdk](./structure-security-oauth-sdk/README.md) - OAuth2 SDK 文档
+- [structure-security-oauth-resource-starter](./structure-security-oauth-resource-starter/README.md) - OAuth2 资源服务器 Starter 文档
 
-项目支持多环境配置，通过 `spring.profiles.active` 指定环境：
-
-```bash
-# 开发环境
-java -jar app.jar --spring.profiles.active=dev
-
-# 测试环境
-java -jar app.jar --spring.profiles.active=test
-
-# 生产环境
-java -jar app.jar --spring.profiles.active=prod
-```
-
-### 核心接口
-
-- **ITokenService**: Token生成与解析服务
-- **ITokenStore**: Token存储服务
-- **ICorsFilter**: CORS跨域过滤器接口
-
-### StructureAuthUser 用户实体
-
-实现 `UserDetails` 接口的用户实体，包含以下属性：
-
-| 属性 | 说明 |
-|------|------|
-| `id` | 用户ID |
-| `username` | 用户名 |
-| `password` | 密码 |
-| `enable` | 是否启用 |
-| `unlocked` | 是否锁定 |
-| `unexpired` | 是否过期 |
-| `authorities` | 用户权限集合 |
+### 示例项目
+- [structure-security-samples](./structure-security-samples/README.md) - 示例项目总览
+  - [structure-security-jwt-example](./structure-security-samples/structure-security-jwt-example/README.md) - JWT 认证示例
+  - [structure-security-permission-sample](./structure-security-samples/structure-security-permission-sample/README.md) - 权限管理示例
+  - [structure-security-basicauth-server-sample](./structure-security-samples/structure-security-basicauth-server-sample/README.md) - Basic Auth 服务端示例
+  - [structure-security-oauth-resource-example](./structure-security-samples/structure-security-oauth-resource-example/README.md) - OAuth2 资源服务器示例
 
 ## 开发者维护
 
 ### 本地构建
 
 ```bash
-# 安装依赖并构建
 cd structure-security-dependencies
-mvn clean install -Dmaven.test.skip=true -Drevision=1.1.0
+mvn clean install -Dmaven.test.skip=true -Drevision=1.1.1-SNAPSHOT
 
 # 或使用脚本
-./scripts/install.sh 1.1.0
+./scripts/install.sh 1.1.1-SNAPSHOT
+```
+
+### 发布到 Maven 仓库
+
+```bash
+./scripts/release.sh
 ```
 
 ### 项目结构
 
 ```
-structure-jwt-security-starter/src/main/java/cn/structure/starter/jwt/
-├── configuration/    # 自动配置类
-│   ├── AutoConfiguration.java
-│   ├── CorsFilter.java
-│   ├── JwtAuthenticationEntryPoint.java
-│   ├── JwtRequestFilter.java
-│   └── WebSecurityConfig.java
-├── dto/              # 数据传输对象
-├── endpoint/        # 登录登出端点
-├── enums/           # 枚举类
-├── filter/          # 过滤器
-├── interfaces/      # 核心接口
-├── properties/      # 配置属性类
-└── service/         # 服务实现
+structure-security/
+├── .github/workflows/        # GitHub Actions 工作流
+├── scripts/                  # 构建和发布脚本
+├── structure-security-dependencies/    # 依赖管理
+├── structure-security-common/          # 公共模块
+├── structure-security-core/            # 核心模块
+├── structure-security-jwt-starter/     # JWT Starter
+├── structure-security-permission-starter/  # 权限 Starter
+├── structure-security-basicauth-starter/   # Basic Auth Starter
+├── structure-security-oauth-sdk/       # OAuth2 SDK
+├── structure-security-oauth-common/    # OAuth2 公共模块
+├── structure-security-oauth-resource-starter/  # OAuth2 资源服务器 Starter
+└── structure-security-samples/         # 示例项目
 ```
 
-### 发布到Maven仓库
+## 版本历史
 
-```bash
-# 更新版本号后执行
-./scripts/release.sh
-```
+详细变更记录请查看 [CHANGELOG.md](./CHANGELOG.md)。
 
-## License
+### 当前版本
+
+- **1.1.1-SNAPSHOT**：开发中版本
+- **1.1.0-SNAPSHOT**：JDK 17 + Spring Boot 4.0.6 升级
+- **1.0.3**：安全增强，CI/CD 集成
+- **1.0.1**：Bug 修复
+- **1.0.0**：初始版本
+
+## 升级指南
+
+从 1.0.x 升级到 1.1.x 请参考 [UPGRADE_GUIDE.md](./UPGRADE_GUIDE.md)。
+
+## 贡献者
+
+感谢以下贡献者的付出：
+
+- **chuck** - 主要开发者
+- **chuckLcq** - 项目维护者
+- **Chuanqiang Liu** - 贡献者
+
+## 许可证
 
 Apache License 2.0
+
+## 联系方式
+
+- 📧 **邮箱**: support@structured.cn
+- 🌐 **官网**: https://projects.structured.cn
+- 💬 **GitHub Issues**: https://github.com/structure-projects/structure-security/issues
+
