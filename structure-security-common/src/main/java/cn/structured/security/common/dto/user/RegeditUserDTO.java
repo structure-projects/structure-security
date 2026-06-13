@@ -30,4 +30,9 @@ public class RegeditUserDTO {
      * 电话
      */
     private String phone;
+
+    /**
+     * 验证码
+     */
+    private String code;
 }
