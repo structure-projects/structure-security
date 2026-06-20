@@ -77,14 +77,14 @@ public Order getOrder(Long id) {
 **编程方式：**
 
 ```java
-import cn.structured.security.permission.IPermissionService;
+import cn.structured.starter.permission.service.IPermissionService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class OrderService {
-    
+
     @Autowired
     private IPermissionService permissionService;
-    
+
     public void createOrder() {
         if (permissionService.hasPermission("order:create")) {
             // 有权限，执行操作
