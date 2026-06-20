@@ -27,12 +27,30 @@ public class SecurityUtils {
     }
 
     public Long getUserId() {
-        JSONObject authUser = JSON.parseObject(JSON.toJSONString(SecurityUtils.getUser()));
-        Long userId = authUser.getLong(AuthConstant.USER_ID);
-        return null != userId ? userId : authUser.getLong("id");
+        try {
+            JSONObject authUser = JSON.parseObject(JSON.toJSONString(SecurityUtils.getUser()));
+            Long userId = authUser.getLong(AuthConstant.USER_ID);
+            return null != userId ? userId : authUser.getLong("id");
+        }catch (Exception e) {
+            return null;
+        }
+    }
+
+    public String getStrUserId() {
+        try {
+            JSONObject authUser = JSON.parseObject(JSON.toJSONString(SecurityUtils.getUser()));
+            String userId = authUser.getString(AuthConstant.USER_ID);
+            return null != userId ? userId : authUser.getString("id");
+        }catch (Exception e) {
+            return null;
+        }
     }
 
     public StructureAuthUser getAuthUser() {
-        return JSON.parseObject(JSON.toJSONString(SecurityUtils.getUser()), StructureAuthUser.class);
+        try {
+            return JSON.parseObject(JSON.toJSONString(SecurityUtils.getUser()), StructureAuthUser.class);
+        }catch (Exception e){
+            return null;
+        }
     }
 }

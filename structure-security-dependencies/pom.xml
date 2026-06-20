@@ -88,6 +88,7 @@
         <module>../structure-security-oauth-sdk</module>
         <module>../structure-security-oauth-common</module>
         <module>../structure-security-oauth-resource-starter</module>
+        <module>../structure-security-context-starter</module>
     </modules>
 
     <dependencyManagement>

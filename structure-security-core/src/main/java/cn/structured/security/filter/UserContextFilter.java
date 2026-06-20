@@ -30,11 +30,14 @@ public class UserContextFilter implements Filter {
         try {
             // 从DataScopeProvider获取数据权限信息
             Long userId = SecurityUtils.getUserId();
-            UserContextEntity userContextEntity = userProvider.loadUser(userId.toString());
 
-            // 设置到上下文
-            UserContext.set(userContextEntity);
+            if (null != userId) {
+                UserContextEntity userContextEntity = userProvider.loadUser(userId.toString());
 
+                // 设置到上下文
+                UserContext.set(userContextEntity);
+
+            }
             // 继续处理请求
             chain.doFilter(request, response);
 

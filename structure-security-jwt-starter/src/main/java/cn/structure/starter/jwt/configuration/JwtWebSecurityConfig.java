@@ -4,10 +4,11 @@ import cn.structure.common.constant.AuthConstant;
 import cn.structure.common.constant.SymbolConstant;
 import cn.structure.common.enums.NumberEnum;
 import cn.structure.starter.jwt.filter.JwtRequestFilter;
-import cn.structured.security.interfaces.ICorsFilter;
 import cn.structure.starter.jwt.interfaces.ITokenService;
 import cn.structure.starter.jwt.interfaces.ITokenStore;
 import cn.structure.starter.jwt.properties.SecurityConfig;
+import cn.structured.security.filter.UserContextFilter;
+import cn.structured.security.interfaces.ICorsFilter;
 import jakarta.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,6 +56,9 @@ public class JwtWebSecurityConfig {
 
     @Resource
     private ITokenStore tokenStore;
+
+    @Resource
+    private UserContextFilter userContextFilter;
 
     @Bean
     @ConditionalOnMissingBean(AuthenticationManager.class)
