@@ -1,6 +1,6 @@
 package cn.structured.sample.controller;
 
-import cn.structured.security.permission.IPermissionService;
+import cn.structured.starter.permission.service.IPermissionService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;

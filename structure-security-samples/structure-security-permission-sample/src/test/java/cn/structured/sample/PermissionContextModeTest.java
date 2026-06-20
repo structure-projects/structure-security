@@ -1,6 +1,5 @@
 package cn.structured.sample;
 
-import cn.structured.security.permission.IPermissionService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;

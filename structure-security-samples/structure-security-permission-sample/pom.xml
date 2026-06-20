@@ -53,6 +53,10 @@
             <artifactId>spring-boot-webmvc-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>cn.structured</groupId>
+            <artifactId>structure-security-core</artifactId>
+        </dependency>
     </dependencies>
 
 </project>
