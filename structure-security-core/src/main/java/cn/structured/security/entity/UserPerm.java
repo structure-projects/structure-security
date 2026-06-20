@@ -1,4 +1,4 @@
-package cn.structured.security.permission;
+package cn.structured.security.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

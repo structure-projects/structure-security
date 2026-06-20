@@ -1,4 +1,6 @@
-package cn.structured.security.permission;
+package cn.structured.security.util;
+
+import cn.structured.security.entity.UserPerm;
 
 import java.util.Set;
 
