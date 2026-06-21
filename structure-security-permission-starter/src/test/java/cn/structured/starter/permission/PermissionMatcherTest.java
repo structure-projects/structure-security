@@ -1,8 +1,7 @@
 package cn.structured.starter.permission;
 
-import cn.structured.security.permission.IPermissionService;
-import cn.structured.security.permission.PermissionMatcher;
-import cn.structured.security.permission.UserPerm;
+import cn.structured.security.util.PermissionMatcher;
+import cn.structured.security.entity.UserPerm;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;

@@ -24,13 +24,15 @@
         <module>./structure-security-permission-sample</module>
         <module>./structure-security-oauth-resource-example</module>
         <module>./structure-security-basicauth-server-sample</module>
+        <module>./structure-security-context-sample</module>
+        <module>./structure-security-core-sample</module>
     </modules>
 
     <!-- 示例工程通用的配置 -->
     <properties>
         <revision>1.0.0</revision>
         <structure.version>1.4.0-SNAPSHOT</structure.version>
-        <structure-security.version>1.1.1-SNAPSHOT</structure-security.version>
+        <structure-security.version>1.1.2-SNAPSHOT</structure-security.version>
         <jjwt.version>0.12.7</jjwt.version>
         <lombok.version>1.18.30</lombok.version>
         <java.version>17</java.version>
@@ -82,6 +84,11 @@
             <dependency>
                 <groupId>cn.structured</groupId>
                 <artifactId>structure-security-oauth-resource-starter</artifactId>
+                <version>${structure-security.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.structured</groupId>
+                <artifactId>structure-security-context-starter</artifactId>
                 <version>${structure-security.version}</version>
             </dependency>
             

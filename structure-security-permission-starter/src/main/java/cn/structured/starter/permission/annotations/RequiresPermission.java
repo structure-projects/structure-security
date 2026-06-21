@@ -1,4 +1,4 @@
-package cn.structured.security.permission;
+package cn.structured.starter.permission.annotations;
 
 import java.lang.annotation.*;
 

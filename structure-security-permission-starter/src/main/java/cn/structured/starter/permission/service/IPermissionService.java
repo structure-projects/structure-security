@@ -1,6 +1,6 @@
-package cn.structured.security.permission;
+package cn.structured.starter.permission.service;
 
-import java.util.Set;
+import cn.structured.security.entity.UserPerm;import java.util.Set;
 
 /**
  * 权限服务接口

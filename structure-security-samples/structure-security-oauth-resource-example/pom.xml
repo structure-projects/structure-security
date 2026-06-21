@@ -47,9 +47,7 @@
         <dependency>
             <groupId>cn.structured</groupId>
             <artifactId>structure-security-oauth-resource-starter</artifactId>
-            <scope>provided</scope>
         </dependency>
-
     </dependencies>
 
 </project>
