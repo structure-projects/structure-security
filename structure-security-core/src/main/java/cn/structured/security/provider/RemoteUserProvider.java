@@ -15,14 +15,17 @@
  */
 package cn.structured.security.provider;
 
+import cn.structure.common.entity.ResultVO;
 import cn.structure.common.utils.BasicAuthGenerator;
 import cn.structure.common.utils.HttpClientUtil;
 import cn.structured.security.configuration.UserContextProperties;
 import cn.structured.security.context.UserContext;
 import cn.structured.security.entity.UserContextEntity;
 import cn.structured.security.interfaces.IUserProvider;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.utils.URIBuilder;
@@ -58,7 +61,7 @@ public class RemoteUserProvider implements IUserProvider {
         this.properties = properties;
         this.httpClient = HttpClientUtil.getHttpClient();
         this.objectMapper = new ObjectMapper();
-        
+
         if (properties.getRemote().getBasicAuth().isEnabled()) {
             String username = properties.getRemote().getBasicAuth().getUsername();
             String password = properties.getRemote().getBasicAuth().getPassword();
@@ -89,19 +92,31 @@ public class RemoteUserProvider implements IUserProvider {
         try {
             String url = userInfoUrl.replace("{userId}", userId);
             URI uri = new URIBuilder(url).build();
-            
+
             HttpGet httpGet = new HttpGet(uri);
             if (basicAuthHeader != null) {
                 httpGet.setHeader("Authorization", basicAuthHeader);
             }
             httpGet.setHeader("Accept", "application/json");
 
-            org.apache.http.HttpResponse response = httpClient.execute(httpGet);
+            HttpResponse response = httpClient.execute(httpGet);
             int statusCode = response.getStatusLine().getStatusCode();
-            
+
             if (statusCode == 200) {
                 String responseBody = EntityUtils.toString(response.getEntity());
-                UserContextEntity user = objectMapper.readValue(responseBody, UserContextEntity.class);
+                // 解析响应体
+                log.debug("Response body: {}", responseBody);
+                // 创建 ResultVO 对象
+                ResultVO<UserContextEntity> resultVO = objectMapper.readValue(
+                        responseBody,
+                        new TypeReference<>() {
+                        }
+                );
+                if (!resultVO.getSuccess()) {
+                    log.warn("Failed to load user from remote server, error message: {}", resultVO.getMsg());
+                    return null;
+                }
+                UserContextEntity user = resultVO.getData();
                 if (user != null) {
                     UserContext.set(user);
                     log.debug("User loaded from remote server: {}", userId);
