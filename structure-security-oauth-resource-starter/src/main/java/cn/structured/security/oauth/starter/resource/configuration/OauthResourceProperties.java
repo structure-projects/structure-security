@@ -19,7 +19,7 @@ import java.util.Map;
 @Setter
 @ToString
 @Configuration
-@ConfigurationProperties(prefix = "structure.oauth.resource")
+@ConfigurationProperties(prefix = "structure.security")
 public class OauthResourceProperties {
 
     private String resourceId;
