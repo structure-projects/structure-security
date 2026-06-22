@@ -6,6 +6,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 @Data
@@ -49,4 +52,15 @@ public class UserContextEntity {
      * 登录时间
      */
     protected LocalDateTime loginTime;
+
+
+    /**
+     * 列级字段可见性配置
+     * <p>
+     * key: 资源名称（如 "order"）
+     * value: 该资源下隐藏的字段列表
+     * </p>
+     */
+    private Map<String, List<String>> hiddenFields = new HashMap<>();
+
 }
