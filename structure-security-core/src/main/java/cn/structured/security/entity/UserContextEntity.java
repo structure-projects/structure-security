@@ -23,6 +23,31 @@ public class UserContextEntity {
     protected String userId;
 
     /**
+     * 用户名
+     */
+    protected String username;
+
+    /**
+     * 昵称
+     */
+    protected String nickname;
+
+    /**
+     * 头像
+     */
+    protected String avatar;
+
+    /**
+     * 邮箱
+     */
+    protected String email;
+
+    /**
+     * 手机号
+     */
+    protected String mobile;
+
+    /**
      * 部门ID
      */
     protected String deptId;
