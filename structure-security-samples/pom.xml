@@ -31,7 +31,7 @@
     <!-- 示例工程通用的配置 -->
     <properties>
         <revision>1.0.0</revision>
-        <structure.version>1.4.0-SNAPSHOT</structure.version>
+        <structure.version>1.4.2</structure.version>
         <structure-security.version>1.1.2-SNAPSHOT</structure-security.version>
         <jjwt.version>0.12.7</jjwt.version>
         <lombok.version>1.18.30</lombok.version>
