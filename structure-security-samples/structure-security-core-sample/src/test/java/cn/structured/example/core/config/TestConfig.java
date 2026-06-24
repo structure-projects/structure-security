@@ -3,11 +3,9 @@ package cn.structured.example.core.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Primary;
-import org.springframework.security.authorization.AuthorizationDecision;
-import org.springframework.security.authorization.AuthorizationManager;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
-import org.springframework.security.web.access.intercept.RequestAuthorizationContext;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.web.SecurityFilterChain;
 
 @TestConfiguration
 @EnableMethodSecurity
@@ -19,8 +17,13 @@ public class TestConfig {
     }
 
     @Bean
-    @Primary
-    public AuthorizationManager<RequestAuthorizationContext> requestAuthorizationContextAuthorizationManager() {
-        return (authentication, context) -> new AuthorizationDecision(true);
+    public SecurityFilterChain testSecurityFilterChain(HttpSecurity http) throws Exception {
+        http
+            .csrf(csrf -> csrf.disable())
+            .anonymous(anonymous -> anonymous.disable())
+            .authorizeHttpRequests(authorize -> authorize
+                .anyRequest().permitAll()
+            );
+        return http.build();
     }
 }
