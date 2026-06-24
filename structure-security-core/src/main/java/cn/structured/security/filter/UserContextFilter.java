@@ -7,6 +7,7 @@ import cn.structured.security.util.SecurityUtils;
 import jakarta.servlet.*;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.annotation.Order;
 
 import java.io.IOException;
 
@@ -24,6 +25,7 @@ public class UserContextFilter implements Filter {
     private final IUserProvider userProvider;
 
 
+    @Order(100)
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
