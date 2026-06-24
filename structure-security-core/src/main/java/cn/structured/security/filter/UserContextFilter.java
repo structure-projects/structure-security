@@ -11,8 +11,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.Order;
 
 import java.io.IOException;
-import java.net.http.HttpHeaders;
-import java.net.http.HttpRequest;
+import java.util.Objects;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * 用户上下文过滤器
@@ -34,21 +35,20 @@ public class UserContextFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
-        HttpRequest httpRequest = (HttpRequest) request;
+        HttpServletRequest httpRequest = (HttpServletRequest) request;
         try {
 
             // 获取用户 SESSION_ID / USER_ID
             // 从DataScopeProvider获取数据权限信息
             Long userId = SecurityUtils.getUserId();
-            HttpHeaders headers = httpRequest.headers();
-            String sessionId = headers.firstValue("sessionId").orElse(null);
+            String sessionId = httpRequest.getHeader("sessionId");
 
             if (null != userId) {
                 // 1从缓存中获取用户信息
                 UserContextEntity cacheUserContext = userContextCache.get(userId.toString());
 
                 // 对比缓缓中是否有用户信息 并且验证是否过期,SESSION_ID 是否一致如果过期则刷新
-                if (null == cacheUserContext || !cacheUserContext.getSessionId().equals(sessionId)) {
+                if (null == cacheUserContext || !Objects.equals(cacheUserContext.getSessionId(), sessionId)) {
                     cacheUserContext = userProvider.loadUser(userId.toString());
                     // 没有用户信息则移除缓存中的用户信息
                     if (null == cacheUserContext) {

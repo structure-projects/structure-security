@@ -1,0 +1,11 @@
+spring:
+  main:
+    allow-circular-references: true
+server:
+  port: 8088
+structure:
+  security:
+    enabled: true
+    antMatchers:
+      unAuthenticated:
+        - /api/core/**
