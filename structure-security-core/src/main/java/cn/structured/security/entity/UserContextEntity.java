@@ -18,6 +18,31 @@ import java.util.Set;
 public class UserContextEntity {
 
     /**
+     * 会话ID
+     */
+    private String sessionId;
+
+    /**
+     * 令牌
+     */
+    private String accessToken;
+
+    /**
+     * 刷新令牌
+     */
+    private String refreshToken;
+
+    /**
+     * 令牌类型
+     */
+    private String tokenType;
+
+    /**
+     * 过期时间
+     */
+    private Long expiresIn;
+
+    /**
      * 用户ID
      */
     protected String userId;

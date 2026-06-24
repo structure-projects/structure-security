@@ -1,5 +1,7 @@
 package cn.structured.security.configuration;
 
+import cn.structured.security.cache.IUserContextCache;
+import cn.structured.security.cache.InMemoryUserContextCache;
 import cn.structured.security.filter.UserContextFilter;
 import cn.structured.security.interfaces.IUserProvider;
 import cn.structured.security.provider.ContextUserProvider;
@@ -53,7 +55,13 @@ public class UserContextAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(UserContextFilter.class)
-    public UserContextFilter userContextFilter(IUserProvider userProvider) {
-        return new UserContextFilter(userProvider);
+    public UserContextFilter userContextFilter(IUserProvider userProvider,IUserContextCache userContextCache) {
+        return new UserContextFilter(userProvider, userContextCache);
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(IUserContextCache.class)
+    public IUserContextCache userContextCache() {
+        return new InMemoryUserContextCache();
     }
 }
