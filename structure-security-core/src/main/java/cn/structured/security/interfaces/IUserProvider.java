@@ -26,8 +26,8 @@ public interface IUserProvider {
      * <p>从不同来源获取用户信息并设置到 UserContext 中。
      * 具体获取方式由实现类决定（Spring Security上下文、请求头、远程服务等）。</p>
      *
-     * @param userId 用户ID
+     * @param sessionId 会话ID
      * @return 当前用户信息，未获取到返回null
      */
-    UserContextEntity loadUser(String userId);
+    UserContextEntity loadUser(String sessionId);
 }
