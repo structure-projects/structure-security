@@ -133,7 +133,7 @@ public final class PermissionMatcher {
      * @return true 表示匹配，false 表示不匹配
      */
     public static boolean matchPart(String userPart, String requiredPart) {
-        if ("*".equals(userPart)) {
+        if ("*".equals(userPart) || "*".equals(requiredPart)) {
             return true;
         }
         return userPart != null && userPart.equals(requiredPart);

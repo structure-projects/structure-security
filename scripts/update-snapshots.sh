@@ -7,4 +7,4 @@ if [ -z "$version" ]; then
 fi
 cd ../
 cd structure-security-dependencies
-mvn clean deploy -P release,gpg -Dmaven.test.skip=true -Drevision=$version
+mvn clean deploy -P release,gpg -Dmaven.test.skip=true -Drevision=$version -pl '!../structure-security-samples'

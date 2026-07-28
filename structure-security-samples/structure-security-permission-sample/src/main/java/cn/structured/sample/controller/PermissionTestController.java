@@ -64,10 +64,10 @@ public class PermissionTestController {
     }
 
     /**
-     * 需要 order:* 权限（资源级通配）
+     * 需要 order:delete 权限
      */
     @DeleteMapping("/order/{id}")
-    @PreAuthorize("@permissionService.hasPermission('order:*')")
+    @PreAuthorize("@permissionService.hasPermission('order:delete')")
     public Map<String, Object> deleteOrder(@PathVariable Long id) {
         log.info("Deleting order {} with permissions check passed", id);
         Map<String, Object> result = new HashMap<>();

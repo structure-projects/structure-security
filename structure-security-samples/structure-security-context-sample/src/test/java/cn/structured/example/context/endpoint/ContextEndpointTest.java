@@ -2,6 +2,8 @@ package cn.structured.example.context.endpoint;
 
 import cn.structured.example.context.config.AbstractIntegrationTest;
 import cn.structured.example.context.config.TestConfig;
+import cn.structured.security.context.UserContext;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -21,6 +23,13 @@ class ContextEndpointTest extends AbstractIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @BeforeEach
+    void setUp() {
+        // 清理线程上下文，避免测试间 UserContext 污染
+        // （如 LoginTests/EndpointAvailabilityTests 设置的用户会在无登录测试中残留）
+        UserContext.remove();
+    }
 
     @Nested
     @DisplayName("登录功能测试")

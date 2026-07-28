@@ -93,6 +93,7 @@
         <module>../structure-security-oauth-common</module>
         <module>../structure-security-oauth-resource-starter</module>
         <module>../structure-security-context-starter</module>
+        <module>../structure-security-samples</module>
     </modules>
 
     <dependencyManagement>
@@ -124,12 +125,27 @@
             </dependency>
             <dependency>
                 <groupId>cn.structured</groupId>
-                <artifactId>structure-security-basicauth-client</artifactId>
+                <artifactId>structure-security-basicauth-starter</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
                 <groupId>cn.structured</groupId>
-                <artifactId>structure-security-basicauth-sterter</artifactId>
+                <artifactId>structure-security-oauth-sdk</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.structured</groupId>
+                <artifactId>structure-security-oauth-common</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.structured</groupId>
+                <artifactId>structure-security-oauth-resource-starter</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.structured</groupId>
+                <artifactId>structure-security-context-starter</artifactId>
                 <version>${revision}</version>
             </dependency>
 

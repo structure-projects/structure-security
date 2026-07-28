@@ -5,19 +5,21 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>4.0.6</version>
-        <relativePath/><!-- lookup parent from repository -->
+        <groupId>cn.structured</groupId>
+        <artifactId>structure-security-dependencies</artifactId>
+        <version>${revision}</version>
+        <relativePath>../structure-security-dependencies/pom.xml</relativePath>
     </parent>
 
-    <groupId>cn.structured</groupId>
     <artifactId>structure-security-samples</artifactId>
-    <version>${revision}</version>
     <packaging>pom</packaging>
     <name>structure-security-samples</name>
     <description>Structure Security Examples and Samples</description>
 
+    <!-- 禁止发布示例工程到 Maven 中央仓库 -->
+    <properties>
+        <maven.deploy.skip>true</maven.deploy.skip>
+    </properties>
 
     <modules>
         <module>./structure-security-jwt-example</module>
@@ -28,76 +30,9 @@
         <module>./structure-security-core-sample</module>
     </modules>
 
-    <!-- 示例工程通用的配置 -->
-    <properties>
-        <revision>1.0.0</revision>
-        <structure.version>1.4.4</structure.version>
-        <structure-security.version>1.1.2-SNAPSHOT</structure-security.version>
-        <jjwt.version>0.12.7</jjwt.version>
-        <lombok.version>1.18.30</lombok.version>
-        <java.version>17</java.version>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    </properties>
-
-    <!-- 示例工程通用的依赖管理 -->
+    <!-- 示例工程额外依赖管理（父 POM 未覆盖的） -->
     <dependencyManagement>
         <dependencies>
-            <!-- Structure Security Dependencies -->
-            <dependency>
-                <groupId>cn.structured</groupId>
-                <artifactId>structure-security-core</artifactId>
-                <version>${structure-security.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>cn.structured</groupId>
-                <artifactId>structure-security-permission-starter</artifactId>
-                <version>${structure-security.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>cn.structured</groupId>
-                <artifactId>structure-security-jwt-starter</artifactId>
-                <version>${structure-security.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>cn.structured</groupId>
-                <artifactId>structure-security-basicauth-starter</artifactId>
-                <version>${structure-security.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>cn.structured</groupId>
-                <artifactId>structure-security-common</artifactId>
-                <version>${structure-security.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>cn.structured</groupId>
-                <artifactId>structure-security-oauth-sdk</artifactId>
-                <version>${structure-security.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>cn.structured</groupId>
-                <artifactId>structure-security-oauth-common</artifactId>
-                <version>${structure-security.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>cn.structured</groupId>
-                <artifactId>structure-security-oauth-resource-starter</artifactId>
-                <version>${structure-security.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>cn.structured</groupId>
-                <artifactId>structure-security-context-starter</artifactId>
-                <version>${structure-security.version}</version>
-            </dependency>
-            
-            <!-- Structure Common -->
-            <dependency>
-                <groupId>cn.structured</groupId>
-                <artifactId>structure-common</artifactId>
-                <version>${structure.version}</version>
-            </dependency>
             <dependency>
                 <groupId>cn.structured</groupId>
                 <artifactId>structure-restful-web-starter</artifactId>
@@ -108,22 +43,34 @@
                 <artifactId>structure-redis-starter</artifactId>
                 <version>${structure.version}</version>
             </dependency>
-            
-            <!-- JJWT -->
-            <dependency>
-                <groupId>io.jsonwebtoken</groupId>
-                <artifactId>jjwt</artifactId>
-                <version>${jjwt.version}</version>
-            </dependency>
-            
-            <!-- Lombok -->
-            <dependency>
-                <groupId>org.projectlombok</groupId>
-                <artifactId>lombok</artifactId>
-                <version>${lombok.version}</version>
-            </dependency>
-            
         </dependencies>
     </dependencyManagement>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <parameters>true</parameters>
+                </configuration>
+            </plugin>
+        </plugins>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>repackage</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
 
 </project>

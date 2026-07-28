@@ -1,7 +1,10 @@
 package cn.structured.sample;
 
+import cn.structured.security.cache.IUserContextCache;
+import cn.structured.security.context.UserContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -33,9 +36,19 @@ public class PermissionContextModeTest {
     @Autowired
     private MockMvc mockMvc;
 
-
     @Autowired
     private ObjectMapper objectMapper;
+
+    @Autowired
+    private IUserContextCache userContextCache;
+
+    @BeforeEach
+    public void setUp() {
+        // 清理线程上下文和缓存，避免测试间数据污染
+        // 由于所有测试用户共享 userId=1，需要清除缓存确保每个测试重新加载用户上下文
+        UserContext.remove();
+        userContextCache.remove("1");
+    }
 
     /**
      * 辅助方法：登录并获取 JWT token
