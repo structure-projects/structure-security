@@ -96,6 +96,23 @@
         <module>../structure-security-samples</module>
     </modules>
 
+    <profiles>
+        <profile>
+            <id>release</id>
+            <modules>
+                <module>../structure-security-core</module>
+                <module>../structure-security-permission-starter</module>
+                <module>../structure-security-jwt-starter</module>
+                <module>../structure-security-basicauth-starter</module>
+                <module>../structure-security-common</module>
+                <module>../structure-security-oauth-sdk</module>
+                <module>../structure-security-oauth-common</module>
+                <module>../structure-security-oauth-resource-starter</module>
+                <module>../structure-security-context-starter</module>
+            </modules>
+        </profile>
+    </profiles>
+
     <dependencyManagement>
         <dependencies>
             <dependency>
