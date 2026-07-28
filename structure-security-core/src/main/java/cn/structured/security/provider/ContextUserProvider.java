@@ -10,13 +10,22 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * 默认用户信息提供者
+ * 默认用户信息提供者（仅从 SecurityContext 提取基础认证信息）
  *
- * <p>从 Spring Security 上下文获取用户信息并设置到 UserContext</p>
+ * <p>从 Spring Security 上下文获取用户信息并设置到 UserContext。
+ * 这是 JWT/Token 中能直接提供的信息的最小集合。</p>
+ *
+ * <p><b>填充字段：</b>userId、permissions、loginTime</p>
+ * <p><b>不填充的字段（保持 null）：</b>deptId、tenantId、deptIds、roles</p>
+ *
+ * <p>需要这些业务字段时，请启用 {@link RemoteUserProvider}（配置
+ * {@code structure.security.context.remote.enabled=true}），
+ * 它会通过远程 API 获取完整的用户业务信息。</p>
  *
  * @author chuck
  * @version 1.0.1
@@ -46,8 +55,8 @@ public class ContextUserProvider implements IUserProvider {
     }
 
     private UserContextEntity convertToUserContextEntity(StructureAuthUser authUser) {
-        Set<String> permissions = null;
-        permissions = authUser.getAuthorities().stream()
+        Collection<? extends GrantedAuthority> authorities = authUser.getAuthorities();
+        Set<String> permissions = (authorities != null ? authorities.stream() : java.util.stream.Stream.<GrantedAuthority>empty())
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toSet());
 
