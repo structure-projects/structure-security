@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Collections;
 
 
 /**
@@ -59,7 +60,7 @@ public class StructureAuthUser implements UserDetails, Serializable {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return authorities;
+        return authorities != null ? authorities : Collections.emptyList();
     }
 
     @Override

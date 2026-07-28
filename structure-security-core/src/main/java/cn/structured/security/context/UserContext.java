@@ -1,7 +1,11 @@
 package cn.structured.security.context;
 
 
-import cn.structured.security.entity.UserContextEntity;import lombok.extern.slf4j.Slf4j;
+import cn.structured.security.entity.UserContextEntity;
+import lombok.extern.slf4j.Slf4j;
+
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -52,5 +56,135 @@ public class UserContext {
         if (log.isDebugEnabled()) {
             log.debug("DataScope context cleared");
         }
+    }
+
+    /**
+     * 获取当前部门ID
+     *
+     * @return 部门ID
+     */
+    public static String getDeptId() {
+        UserContextEntity userContext = UserContext.get();
+        if (userContext != null && userContext.getUserId() != null) {
+            return userContext.getDeptId();
+        }
+        return null;
+    }
+
+    /**
+     * 获取当前部门ID
+     *
+     * @return 部门ID
+     */
+    public static Set<String> getDeptIds() {
+        UserContextEntity userContext = UserContext.get();
+        if (userContext != null && userContext.getUserId() != null) {
+            return userContext.getDeptIds();
+        }
+        return null;
+    }
+
+    /**
+     * 获取当前部门ID
+     *
+     * @return 部门ID
+     */
+    public static Set<Long> getLoneDeptIds() {
+        UserContextEntity userContext = UserContext.get();
+        if (userContext != null && userContext.getUserId() != null) {
+            return userContext.getDeptIds().stream().map(Long::parseLong).collect(Collectors.toSet());
+        }
+        return null;
+    }
+
+    /**
+     * 获取当前部门ID
+     *
+     * @return 部门ID
+     */
+    public static Long getLongDeptId() {
+        UserContextEntity userContext = UserContext.get();
+        if (userContext != null && userContext.getUserId() != null) {
+            return Long.parseLong(userContext.getDeptId());
+        }
+        return null;
+    }
+
+    /**
+     * 获取当前用户ID
+     *
+     * @return 用户ID
+     */
+    public static String getUserId() {
+        UserContextEntity userContext = UserContext.get();
+        if (userContext != null && userContext.getUserId() != null) {
+            return userContext.getUserId();
+        }
+        return null;
+    }
+
+    /**
+     * 获取当前用户ID
+     *
+     * @return 用户ID
+     */
+    public static Long getLongUserId() {
+        UserContextEntity userContext = UserContext.get();
+        if (userContext != null && userContext.getUserId() != null) {
+            return Long.parseLong(userContext.getUserId());
+        }
+        return null;
+    }
+
+    /**
+     * 获取当前用户角色ID
+     *
+     * @return 用户角色ID
+     */
+    public static Set<String> getRoles() {
+        UserContextEntity userContext = UserContext.get();
+        if (userContext != null && userContext.getUserId() != null) {
+            return userContext.getRoles();
+        }
+        return null;
+    }
+
+    /**
+     * 获取当前用户角色ID
+     *
+     * @return 用户角色ID
+     */
+    public static Set<Long> getLongRoles() {
+        UserContextEntity userContext = UserContext.get();
+        if (userContext != null && userContext.getUserId() != null) {
+            return userContext.getRoles().stream().map(Long::parseLong).collect(Collectors.toSet());
+        }
+        return null;
+    }
+
+    /**
+     * 获取当前用户权限ID
+     *
+     * @return 用户权限ID
+     */
+    public static Set<String> getPermissions() {
+        UserContextEntity userContext = UserContext.get();
+        if (userContext != null && userContext.getUserId() != null) {
+            return userContext.getPermissions();
+        }
+        return null;
+    }
+
+    /**
+     * 获取当前用户权限ID
+     *
+     * @return 用户权限ID
+     */
+    public static Set<Long> getLongPermissions() {
+        UserContextEntity userContext = UserContext.get();
+        if (userContext != null && userContext.getUserId() != null) {
+            return userContext.getPermissions().stream().map(Long::parseLong).collect(Collectors.toSet());
+        }
+        return null;
     }
 }

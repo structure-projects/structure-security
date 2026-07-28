@@ -113,11 +113,15 @@ public class JwtWebSecurityConfig {
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 );
-        httpSecurity.addFilterBefore(new JwtRequestFilter(tokenService, securityConfig, tokenStore), UsernamePasswordAuthenticationFilter.class);
+        JwtRequestFilter jwtRequestFilter = new JwtRequestFilter(tokenService, securityConfig, tokenStore);
+        httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
         Class<?> aClass = Class.forName(securityConfig.getCorsFilterClass());
         ICorsFilter iCorsFilter = (ICorsFilter) aClass.getDeclaredConstructor().newInstance();
         httpSecurity.addFilterBefore(iCorsFilter, JwtRequestFilter.class);
+
+        // 在 JWT 认证之后，填充 UserContext（业务数据由 RemoteUserProvider 远程获取）
+        httpSecurity.addFilterAfter(userContextFilter, UsernamePasswordAuthenticationFilter.class);
 
         return httpSecurity.build();
     }

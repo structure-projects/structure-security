@@ -3,12 +3,17 @@ package cn.structured.security.oauth.starter.resource.configuration;
 import cn.structure.common.constant.AuthConstant;
 import cn.structure.common.constant.SymbolConstant;
 import cn.structure.common.enums.NumberEnum;
+import cn.structured.security.filter.UserContextFilter;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
+import org.springframework.security.oauth2.server.resource.web.authentication.BearerTokenAuthenticationFilter;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.SecurityFilterChain;
@@ -40,7 +45,11 @@ public class ResourceServerConfig {
     private JwtDecoder jwtDecoder;
     
     @Resource
-    private JwtAuthenticationConverter jwtAuthenticationConverter;
+    @Qualifier("structureJwtAuthenticationConverter")
+    private Converter<Jwt, AbstractAuthenticationToken> jwtAuthenticationConverter;
+
+    @Resource
+    private UserContextFilter userContextFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -84,7 +93,9 @@ public class ResourceServerConfig {
                 )
                 .authenticationEntryPoint(authenticationEntryPoint)
                 .accessDeniedHandler(accessDeniedHandler)
-            );
+            )
+            // 在 OAuth2 Bearer Token 认证之后，填充 UserContext（业务数据由 RemoteUserProvider 远程获取）
+            .addFilterAfter(userContextFilter, BearerTokenAuthenticationFilter.class);
         
         return http.build();
     }

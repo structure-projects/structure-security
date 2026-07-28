@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -202,9 +203,170 @@ public class JwtSecurityTest {
     public void testNoPermissionForAdmin() throws Exception {
         assertNotNull(validToken, "Token should be obtained from login test");
 
-        // 使用管理员的 Token 尝试访问需要 ROLE_SUPER_ADMIN 的接口
         mockMvc.perform(get("/test/hello3")
                         .header("Authorization", "Bearer " + validToken))
                 .andExpect(jsonPath("$.code").value("PERMISSION_DENIED"));
+    }
+
+    @Test
+    @Order(15)
+    @DisplayName("测试15：登出功能 - 正常登出")
+    public void testLogoutSuccess() throws Exception {
+        assertNotNull(validToken, "Token should be obtained from login test");
+
+        mockMvc.perform(post("/api/user/logout")
+                        .header("Authorization", "Bearer " + validToken))
+                .andExpect(jsonPath("$.code").value("SUCCESS"));
+    }
+
+    @Test
+    @Order(16)
+    @DisplayName("测试16：登录 - 空用户名 + 错误密码")
+    public void testLoginWithEmptyUsername() throws Exception {
+        JSONObject loginRequest = new JSONObject();
+        loginRequest.put("username", "");
+        loginRequest.put("password", "wrongpassword");
+
+        mockMvc.perform(post("/api/user/login")
+                        .content(JSON.toJSONString(loginRequest))
+                        .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(jsonPath("$.message").value("用户名密码错误！"));
+    }
+
+    @Test
+    @Order(17)
+    @DisplayName("测试17：登录 - 空密码")
+    public void testLoginWithEmptyPassword() throws Exception {
+        JSONObject loginRequest = new JSONObject();
+        loginRequest.put("username", "admin");
+        loginRequest.put("password", "");
+
+        mockMvc.perform(post("/api/user/login")
+                        .content(JSON.toJSONString(loginRequest))
+                        .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(jsonPath("$.message").value("用户名密码错误！"));
+    }
+
+    @Test
+    @Order(18)
+    @DisplayName("测试18：登录 - 用户名不存在 + 错误密码")
+    public void testLoginWithNonExistentUser() throws Exception {
+        JSONObject loginRequest = new JSONObject();
+        loginRequest.put("username", "nonexistentuser");
+        loginRequest.put("password", "wrongpassword");
+
+        mockMvc.perform(post("/api/user/login")
+                        .content(JSON.toJSONString(loginRequest))
+                        .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(jsonPath("$.message").value("用户名密码错误！"));
+    }
+
+    @Test
+    @Order(19)
+    @DisplayName("测试19：使用普通用户 Token 访问公开接口 - 应成功")
+    public void testRegularUserAccessPublicEndpoint() throws Exception {
+        JSONObject loginRequest = new JSONObject();
+        loginRequest.put("username", "user");
+        loginRequest.put("password", "123456");
+
+        MvcResult result = mockMvc.perform(post("/api/user/login")
+                        .content(JSON.toJSONString(loginRequest))
+                        .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(jsonPath("$.code").value("SUCCESS"))
+                .andReturn();
+
+        String response = result.getResponse().getContentAsString();
+        JSONObject jsonObject = JSON.parseObject(response);
+        String userToken = jsonObject.getString("data");
+
+        mockMvc.perform(get("/test/hello")
+                        .header("Authorization", "Bearer " + userToken))
+                .andExpect(jsonPath("$.code").value("SUCCESS"));
+    }
+
+    @Test
+    @Order(20)
+    @DisplayName("测试20：Token 不带 Bearer 前缀 - 应返回 NOT_LOGGED_IN")
+    public void testTokenWithoutBearerPrefix() throws Exception {
+        assertNotNull(validToken, "Token should be obtained from login test");
+
+        mockMvc.perform(get("/test/hello")
+                        .header("Authorization", validToken))
+                .andExpect(jsonPath("$.code").value("NOT_LOGGED_IN"));
+    }
+
+    @Test
+    @Order(21)
+    @DisplayName("测试21：使用小写 bearer 前缀 - 应返回 NOT_LOGGED_IN")
+    public void testTokenWithLowercaseBearer() throws Exception {
+        assertNotNull(validToken, "Token should be obtained from login test");
+
+        mockMvc.perform(get("/test/hello")
+                        .header("Authorization", "bearer " + validToken))
+                .andExpect(jsonPath("$.code").value("NOT_LOGGED_IN"));
+    }
+
+    @Test
+    @Order(22)
+    @DisplayName("测试22：多用户交替访问 - 上下文隔离")
+    public void testMultipleUsersAlternatingAccess() throws Exception {
+        JSONObject adminRequest = new JSONObject();
+        adminRequest.put("username", "admin");
+        adminRequest.put("password", "123456");
+
+        MvcResult adminResult = mockMvc.perform(post("/api/user/login")
+                        .content(JSON.toJSONString(adminRequest))
+                        .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(jsonPath("$.code").value("SUCCESS"))
+                .andReturn();
+        String adminToken = JSON.parseObject(adminResult.getResponse().getContentAsString()).getString("data");
+
+        JSONObject userRequest = new JSONObject();
+        userRequest.put("username", "user");
+        userRequest.put("password", "123456");
+
+        MvcResult userResult = mockMvc.perform(post("/api/user/login")
+                        .content(JSON.toJSONString(userRequest))
+                        .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(jsonPath("$.code").value("SUCCESS"))
+                .andReturn();
+        String userToken = JSON.parseObject(userResult.getResponse().getContentAsString()).getString("data");
+
+        mockMvc.perform(get("/test/hello2")
+                        .header("Authorization", "Bearer " + adminToken))
+                .andExpect(jsonPath("$.code").value("SUCCESS"));
+
+        mockMvc.perform(get("/test/hello2")
+                        .header("Authorization", "Bearer " + userToken))
+                .andExpect(jsonPath("$.code").value("PERMISSION_DENIED"));
+
+        mockMvc.perform(get("/test/hello2")
+                        .header("Authorization", "Bearer " + adminToken))
+                .andExpect(jsonPath("$.code").value("SUCCESS"));
+    }
+
+    @Test
+    @Order(23)
+    @DisplayName("测试23：登录请求 Content-Type 错误 - 应返回错误")
+    public void testLoginWithWrongContentType() throws Exception {
+        JSONObject loginRequest = new JSONObject();
+        loginRequest.put("username", "admin");
+        loginRequest.put("password", "123456");
+
+        mockMvc.perform(post("/api/user/login")
+                        .content(JSON.toJSONString(loginRequest))
+                        .contentType(MediaType.TEXT_PLAIN_VALUE))
+                .andExpect(status().isUnsupportedMediaType());
+    }
+
+    @Test
+    @Order(24)
+    @DisplayName("测试24：Token 前后有空格 - 应返回 NOT_LOGGED_IN")
+    public void testTokenWithExtraSpaces() throws Exception {
+        assertNotNull(validToken, "Token should be obtained from login test");
+
+        mockMvc.perform(get("/test/hello")
+                        .header("Authorization", " Bearer " + validToken + " "))
+                .andExpect(jsonPath("$.code").value("NOT_LOGGED_IN"));
     }
 }

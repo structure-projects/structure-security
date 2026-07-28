@@ -1,5 +1,6 @@
 package cn.structured.security.filter;
 
+import cn.structured.security.cache.IUserContextCache;
 import cn.structured.security.context.UserContext;
 import cn.structured.security.entity.UserContextEntity;
 import cn.structured.security.interfaces.IUserProvider;
@@ -7,8 +8,12 @@ import cn.structured.security.util.SecurityUtils;
 import jakarta.servlet.*;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.annotation.Order;
 
 import java.io.IOException;
+import java.util.Objects;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * 用户上下文过滤器
@@ -23,20 +28,41 @@ public class UserContextFilter implements Filter {
 
     private final IUserProvider userProvider;
 
+    private final IUserContextCache userContextCache;
 
+
+    @Order(100)
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
+        HttpServletRequest httpRequest = (HttpServletRequest) request;
         try {
+
+            // 获取用户 SESSION_ID / USER_ID
             // 从DataScopeProvider获取数据权限信息
             Long userId = SecurityUtils.getUserId();
+            String sessionId = httpRequest.getHeader("sessionId");
 
             if (null != userId) {
-                UserContextEntity userContextEntity = userProvider.loadUser(userId.toString());
+                // 1从缓存中获取用户信息
+                UserContextEntity cacheUserContext = userContextCache.get(userId.toString());
 
-                // 设置到上下文
-                UserContext.set(userContextEntity);
+                // 对比缓存中是否有用户信息，并且验证 SESSION_ID 是否一致；不一致则刷新
+                if (null == cacheUserContext || !Objects.equals(cacheUserContext.getSessionId(), sessionId)) {
+                    cacheUserContext = userProvider.loadUser(userId.toString());
+                    // 没有用户信息则移除缓存中的用户信息
+                    if (null == cacheUserContext) {
+                        userContextCache.remove(userId.toString());
+                    } else {
+                        // 设置用户信息到缓存中
+                        userContextCache.set(userId.toString(), cacheUserContext);
+                    }
+                }
 
+                // 缓存命中或重新加载后，都要设置到当前线程上下文
+                if (null != cacheUserContext) {
+                    UserContext.set(cacheUserContext);
+                }
             }
             // 继续处理请求
             chain.doFilter(request, response);

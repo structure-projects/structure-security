@@ -29,6 +29,8 @@ structure:
         # 登录接口
         - /api/user/login
         - /api/permissions/**
+        # 健康检查接口
+        - /api/health
 
 # 日志配置
 logging:
