@@ -9,6 +9,7 @@ import cn.structured.security.provider.RemoteUserProvider;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -63,5 +64,23 @@ public class UserContextAutoConfiguration {
     @ConditionalOnMissingBean(IUserContextCache.class)
     public IUserContextCache userContextCache() {
         return new InMemoryUserContextCache();
+    }
+
+    /**
+     * 禁用 UserContextFilter 在 Servlet 层的自动注册。
+     * <p>
+     * UserContextFilter 应由各 SecurityFilterChain 显式控制在认证过滤器之后执行，
+     * 而非在 Servlet Filter 链中自动注册。这样可以确保：
+     * <ul>
+     *   <li>Filter 在 SecurityContext 已就绪后才运行</li>
+     *   <li>避免 Servlet Filter 链和 Security Filter 链中重复执行</li>
+     * </ul>
+     * </p>
+     */
+    @Bean
+    public FilterRegistrationBean<UserContextFilter> userContextFilterRegistration(UserContextFilter userContextFilter) {
+        FilterRegistrationBean<UserContextFilter> registration = new FilterRegistrationBean<>(userContextFilter);
+        registration.setEnabled(false);
+        return registration;
     }
 }

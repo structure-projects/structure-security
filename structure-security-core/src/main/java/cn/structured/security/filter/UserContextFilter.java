@@ -47,7 +47,7 @@ public class UserContextFilter implements Filter {
                 // 1从缓存中获取用户信息
                 UserContextEntity cacheUserContext = userContextCache.get(userId.toString());
 
-                // 对比缓缓中是否有用户信息 并且验证是否过期,SESSION_ID 是否一致如果过期则刷新
+                // 对比缓存中是否有用户信息，并且验证 SESSION_ID 是否一致；不一致则刷新
                 if (null == cacheUserContext || !Objects.equals(cacheUserContext.getSessionId(), sessionId)) {
                     cacheUserContext = userProvider.loadUser(userId.toString());
                     // 没有用户信息则移除缓存中的用户信息
@@ -56,9 +56,12 @@ public class UserContextFilter implements Filter {
                     } else {
                         // 设置用户信息到缓存中
                         userContextCache.set(userId.toString(), cacheUserContext);
-                        // 设置到上下文
-                        UserContext.set(cacheUserContext);
                     }
+                }
+
+                // 缓存命中或重新加载后，都要设置到当前线程上下文
+                if (null != cacheUserContext) {
+                    UserContext.set(cacheUserContext);
                 }
             }
             // 继续处理请求

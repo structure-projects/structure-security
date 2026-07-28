@@ -1,19 +1,21 @@
 package cn.structured.security.oauth.starter.resource.configuration;
 
 import cn.structure.common.constant.AuthConstant;
+import cn.structure.starter.oauth.common.configuration.StructureResourceAccessTokenConverter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.core.convert.converter.Converter;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
-import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.util.FileCopyUtils;
@@ -80,15 +82,17 @@ public class AutoResourceConfiguration {
         }
     }
 
-    @Bean
-    @ConditionalOnMissingBean(JwtAuthenticationConverter.class)
-    public JwtAuthenticationConverter jwtAuthenticationConverter() {
-        JwtGrantedAuthoritiesConverter grantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
-        grantedAuthoritiesConverter.setAuthoritiesClaimName("authorities");
-        grantedAuthoritiesConverter.setAuthorityPrefix("");
-
-        JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
-        jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(grantedAuthoritiesConverter);
-        return jwtAuthenticationConverter;
+    /**
+     * 自定义 JWT 认证转换器。
+     * <p>必须覆盖 Spring Security 默认的 {@code JwtAuthenticationConverter}，
+     * 将 JWT claims 还原为 {@link cn.structured.security.entity.StructureAuthUser}，
+     * 否则 principal 是 Jwt 对象，SecurityUtils 无法提取 userId。</p>
+     *
+     * <p>Bean 名不使用默认的 {@code jwtAuthenticationConverter}，避免与 Spring Boot
+     * OAuth2 自动配置创建的同名 {@code JwtAuthenticationConverter} 发生覆盖。</p>
+     */
+    @Bean("structureJwtAuthenticationConverter")
+    public Converter<Jwt, AbstractAuthenticationToken> structureJwtAuthenticationConverter() {
+        return new StructureResourceAccessTokenConverter();
     }
 }
