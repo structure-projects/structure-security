@@ -29,15 +29,9 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
 
-      - name: Build and install dependencies
-        run: |
-          mvn clean install -Dmaven.test.skip=true -q
-        working-directory: ./structure-security-samples
-
-      - name: Run tests
-        run: |
-          mvn test -q
-        working-directory: ./structure-security-samples
+      - name: Build and test
+        run: mvn clean test
+        working-directory: ./structure-security-dependencies
 
       - name: Publish Test Results
         uses: actions/upload-artifact@v4
