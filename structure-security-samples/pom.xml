@@ -55,6 +55,17 @@
                     <parameters>true</parameters>
                 </configuration>
             </plugin>
+            <!-- 示例工程禁止发布到 Maven Central：禁用父 POM 注入的 central-publishing 插件 -->
+            <plugin>
+                <groupId>org.sonatype.central</groupId>
+                <artifactId>central-publishing-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>injected-central-publishing</id>
+                        <phase>none</phase>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
         <pluginManagement>
             <plugins>
