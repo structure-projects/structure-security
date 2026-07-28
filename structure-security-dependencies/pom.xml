@@ -93,19 +93,8 @@
         <module>../structure-security-oauth-common</module>
         <module>../structure-security-oauth-resource-starter</module>
         <module>../structure-security-context-starter</module>
+        <module>../structure-security-samples</module>
     </modules>
-
-    <profiles>
-        <profile>
-            <id>samples</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <modules>
-                <module>../structure-security-samples</module>
-            </modules>
-        </profile>
-    </profiles>
 
     <dependencyManagement>
         <dependencies>
